@@ -24,5 +24,5 @@ caminho = 'test.txt';
 
 numerozin, arestaszinhas = ler_arquivo(caminho);
 
-print(f"Vértices:{numerozin}");
-print(f"Arestas:{arestaszinhas}");
+#print(f"Vértices:{numerozin}");
+#print(f"Arestas:{arestaszinhas}");
