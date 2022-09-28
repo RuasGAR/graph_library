@@ -1,4 +1,4 @@
-from data_structures.initial_element import ElementoInicialVetorAdj
+from initial_element import ElementoInicialVetorAdj
 
 class VetorAdj:
     
@@ -18,3 +18,10 @@ class VetorAdj:
         for par in arestas:
             self.container[par[0]-1].vetor_vizinhos.append(par[1]-1)
             self.container[par[1]-1].vetor_vizinhos.append(par[0]-1) 
+
+    def percorrer_vizinhos(self,valor_vertice:int):
+        return self.container[valor_vertice].vetor_vizinhos;
+        
+    def __repr__(self) -> str:
+        for v in self.container:
+            print(v);

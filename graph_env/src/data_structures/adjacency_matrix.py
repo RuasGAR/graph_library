@@ -18,6 +18,15 @@ class MatrizAdj:
         for i in range(self.num_vertices):
             print(self.matriz[i])#[:i+1]
 
+    def percorrer_vizinhos(self, valor_vertice):
+        # por estarmos com uma matriz triangular inferior, vamos pegar a linha daquele vértice 
+        # nessa linha, precisamos percorrer e gravar o índice de todos os vértices que tiverem valor igual a 1
+        vizinhos = [];
+        for i in range(self.matriz[valor_vertice]):
+            if(self.matriz[valor_vertice][i] == 1):
+                vizinhos.append(i);
+        return vizinhos;
+
 caminho = "test.txt"
 num, aresta = ler_arquivo(caminho)
 

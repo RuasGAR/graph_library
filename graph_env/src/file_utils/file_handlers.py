@@ -20,9 +20,9 @@ def ler_arquivo(caminho:str) -> None:
     return [numero_vertices, arestas];
 
 
-caminho = 'test.txt';
+#caminho = 'test.txt';
 
-numerozin, arestaszinhas = ler_arquivo(caminho);
+#numerozin, arestaszinhas = ler_arquivo(caminho);
 
 #print(f"Vértices:{numerozin}");
 #print(f"Arestas:{arestaszinhas}");
