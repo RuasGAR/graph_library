@@ -9,14 +9,18 @@ class Vertice:
         self.pai = None;
         self.nivel = 0;
     
-    def reset(self):
-        self.marcador = False;
-        self.pai = None;
-        self.nivel = 0;
-
     def __repr__(self) -> str:
         
         if self.pai == None:
             self.pai = "Raiz"
-        
-        return f"Nó {self.valor+1}\nPai: {str(self.pai)}\nNível: {self.nivel}\n"  
+
+        return f"Nó {self.valor}: ----> Pai: {self.pai}; Nivel: {self.nivel}\n";  
+
+
+
+"""     def reset(self):
+        self.marcador = False;
+        self.pai = None;
+        self.nivel = 0; """
+
+    

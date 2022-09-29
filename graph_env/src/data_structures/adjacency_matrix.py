@@ -27,9 +27,9 @@ class MatrizAdj:
                 vizinhos.append(i);
         return vizinhos;
 
-caminho = "test.txt"
+""" caminho = "test.txt"
 num, aresta = ler_arquivo(caminho)
 
 matriz_teste = MatrizAdj(num)
 matriz_teste.inserir_arestas(aresta)
-matriz_teste.mostra_matriz()
+matriz_teste.mostra_matriz() """

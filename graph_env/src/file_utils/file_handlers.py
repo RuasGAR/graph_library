@@ -1,6 +1,3 @@
-
-
-
 from typing import List,Tuple
 from os import path, getcwd
 
