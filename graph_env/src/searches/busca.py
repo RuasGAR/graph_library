@@ -38,7 +38,8 @@ class Busca:
         while (len(fila) != 0):      
             #print(fila);  
             v = fila.popleft();
-            for w in (grafo.percorrer_vizinhos(v.valor)):
+            #to do : substituir (w-1) por variavel
+            for w in (self.grafo.percorrer_vizinhos(v.valor)):
                 if (self.vertices[w-1].marcador == False):
                     self.vertices[w-1].marcador = True;
                     self.vertices[w-1].nivel = v.nivel + 1;
@@ -46,6 +47,27 @@ class Busca:
                     fila.append(self.vertices[w-1])
 
         return list(filter(lambda x: x.marcador == True, self.vertices));
+
+    def dfs(self, vertice_s, marcados):
+        #dermarcando todos os vértices
+        for no in self.vertices:
+            no.marcador = False;
+            no.pai = None;
+            no.nivel = 0;
+        # pegar no vetor de vértices o vértice s
+        pilha = deque()
+        pilha.append(self.vertices[vertice_s.valor-1])
+        while len(pilha) != 0 :
+            vertice_retirado = pilha.pop()
+            if vertice_retirado.marcador == False :
+                #o elemento que está na posição relativa do vértice retirado dentro de vetor de vértices (self.vertices)
+                relativo_no_vetor = self.vertices[vertice_retirado.valor-1]
+                relativo_no_vetor.marcador = True
+                for vizinho in self.grafo.percorrer_vizinhos(relativo_no_vetor.valor):
+                    vizinho_relativo = self.vertices[vizinho.valor-1]
+                    vizinho_relativo.pai = relativo_no_vetor.valor
+                    vizinho_relativo.nivel = relativo_no_vetor.nivel + 1
+                    pilha.append(vizinho_relativo)
 
 n, arestas = ler_arquivo("graph_env/src/test.txt")
 
