@@ -37,18 +37,18 @@ class Busca:
         # Loop
         while (len(fila) != 0):      
             #print(fila);  
-            v = fila.popleft();
+            v = fila.pop();
             #to do : substituir (w-1) por variavel
             for w in (self.grafo.percorrer_vizinhos(v.valor)):
                 if (self.vertices[w-1].marcador == False):
                     self.vertices[w-1].marcador = True;
                     self.vertices[w-1].nivel = v.nivel + 1;
                     self.vertices[w-1].pai = v.valor; #o ideal seria o endereço de v, mas...
-                    fila.append(self.vertices[w-1])
+                    fila.insert(0,self.vertices[w-1])
 
         return list(filter(lambda x: x.marcador == True, self.vertices));
 
-    def dfs(self, vertice_s, marcados):
+    def dfs(self, vertice_s):
         #dermarcando todos os vértices
         for no in self.vertices:
             no.marcador = False;
@@ -58,6 +58,7 @@ class Busca:
         pilha = deque()
         pilha.append(self.vertices[vertice_s.valor-1])
         while len(pilha) != 0 :
+            print(pilha)
             u = pilha.pop()
             if u.marcador == False :
                 # O elemento que está na posição relativa do vértice retirado dentro de vetor de vértices (self.vertices)
@@ -65,10 +66,15 @@ class Busca:
                 u_no_vetor.marcador = True
                 # Mesma ideia: precisamos marcar o vértice no vetor self.vertices; por isso não pegamos somente o vérice U isolado
                 for vizinho in self.grafo.percorrer_vizinhos(u_no_vetor.valor):
-                    vizinho_no_vetor = self.vertices[vizinho.valor-1]
-                    vizinho_no_vetor.pai = u_no_vetor.valor
-                    vizinho_no_vetor.nivel = u_no_vetor.nivel + 1
-                    pilha.append(vizinho_no_vetor)
+                    vizinho_no_vetor = self.vertices[vizinho-1]
+                    # O if abaixo seria possível fazer com checagem da marcação;
+                    # Porém, como ele só é necessário por conta da atualização do pai e do nível nesse local...
+                    # Optamos por fazer duas checagens em O(1) pela legibilidade e entendimento do processo
+                    if(vizinho_no_vetor.marcador == False): 
+                        vizinho_no_vetor.pai = u_no_vetor.valor
+                        vizinho_no_vetor.nivel = u_no_vetor.nivel + 1
+                    pilha.append(vizinho_no_vetor);
+        return self.vertices
 
 n, arestas = ler_arquivo("graph_env/src/test.txt")
 
@@ -76,7 +82,8 @@ grafo = VetorAdj(n,arestas)
 
 buscador = Busca(grafo);
 #print(str(buscador.vertices)[1:-1].replace(', ','')); #print chatinho pra kct
-print(buscador.bfs(Vertice(3))) 
-#buscador.bfs(Vertice(2))
+#print(buscador.bfs(Vertice(2))) 
+#print(buscador.dfs(Vertice(3))) 
+buscador.dfs(Vertice(3))
     
         
