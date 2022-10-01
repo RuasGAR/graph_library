@@ -87,15 +87,15 @@ grafo_em_matriz.inserir_arestas(arestas);
 matriz_busca = Busca(grafo_em_matriz);
 #print(matriz_busca.vertices);
 
-print(matriz_busca.bfs(Vertice(5)),'\n')
-
+#print(matriz_busca.bfs(Vertice(5)),'\n')
+#print(matriz_busca.dfs(Vertice(5)),'\n')
 
 """ Testes para vetor de adjacências """
 
 grafo_em_vetor = VetorAdj(n, arestas);
 vetor_adj_busca = Busca(grafo_em_vetor);
 #print(str(vetor_adj_busca.vertices)[1:-1].replace(', ','')); #print chatinho pra kct
-print(vetor_adj_busca.bfs(Vertice(5))) 
+#print(vetor_adj_busca.bfs(Vertice(5))) 
 #print(vetor_adj_busca.dfs(Vertice(5))) 
 #vetor_adj_busca.dfs(Vertice(1))
     
