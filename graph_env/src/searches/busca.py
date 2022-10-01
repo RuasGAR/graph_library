@@ -58,16 +58,17 @@ class Busca:
         pilha = deque()
         pilha.append(self.vertices[vertice_s.valor-1])
         while len(pilha) != 0 :
-            vertice_retirado = pilha.pop()
-            if vertice_retirado.marcador == False :
-                #o elemento que está na posição relativa do vértice retirado dentro de vetor de vértices (self.vertices)
-                relativo_no_vetor = self.vertices[vertice_retirado.valor-1]
-                relativo_no_vetor.marcador = True
-                for vizinho in self.grafo.percorrer_vizinhos(relativo_no_vetor.valor):
-                    vizinho_relativo = self.vertices[vizinho.valor-1]
-                    vizinho_relativo.pai = relativo_no_vetor.valor
-                    vizinho_relativo.nivel = relativo_no_vetor.nivel + 1
-                    pilha.append(vizinho_relativo)
+            u = pilha.pop()
+            if u.marcador == False :
+                # O elemento que está na posição relativa do vértice retirado dentro de vetor de vértices (self.vertices)
+                u_no_vetor = self.vertices[u.valor-1]
+                u_no_vetor.marcador = True
+                # Mesma ideia: precisamos marcar o vértice no vetor self.vertices; por isso não pegamos somente o vérice U isolado
+                for vizinho in self.grafo.percorrer_vizinhos(u_no_vetor.valor):
+                    vizinho_no_vetor = self.vertices[vizinho.valor-1]
+                    vizinho_no_vetor.pai = u_no_vetor.valor
+                    vizinho_no_vetor.nivel = u_no_vetor.nivel + 1
+                    pilha.append(vizinho_no_vetor)
 
 n, arestas = ler_arquivo("graph_env/src/test.txt")
 
