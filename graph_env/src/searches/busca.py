@@ -16,7 +16,7 @@ class Busca:
         if(isinstance(grafo, VetorAdj)):
             self.vertices = [Vertice(x.valor) for x in grafo.container] # Quantidade de elementos no vetor container é n 
         elif(isinstance(grafo,MatrizAdj)):
-            self.vertices = [Vertice(x) for x in range(len(grafo.matriz))] #Quantidade de linhas da matriz é n
+            self.vertices = [Vertice(x+1) for x in range(len(grafo.matriz))] # Quantidade de linhas da matriz é n
 
     def bfs(self, vertice_s):
         # Desmarcar todos os vértices
@@ -33,7 +33,6 @@ class Busca:
         self.vertices[vertice_s.valor-1].marcador = True;
         #vertice_s.nivel = 0; desnecessário, mas vou deixar o comentário pra lembrar
         fila.append(vertice_s);
-
         # Loop
         while (len(fila) != 0):      
             #print(fila);  
@@ -58,8 +57,8 @@ class Busca:
         pilha = deque()
         pilha.append(self.vertices[vertice_s.valor-1])
         while len(pilha) != 0 :
-            print(pilha)
-            u = pilha.pop()
+            #print(list(pilha))
+            u = pilha.popleft()
             if u.marcador == False :
                 # O elemento que está na posição relativa do vértice retirado dentro de vetor de vértices (self.vertices)
                 u_no_vetor = self.vertices[u.valor-1]
@@ -74,16 +73,30 @@ class Busca:
                         vizinho_no_vetor.pai = u_no_vetor.valor
                         vizinho_no_vetor.nivel = u_no_vetor.nivel + 1
                     pilha.append(vizinho_no_vetor);
-        return self.vertices
+        return list(filter(lambda x: x.marcador == True, self.vertices));
 
 n, arestas = ler_arquivo("graph_env/src/test.txt")
 
-grafo = VetorAdj(n,arestas)
 
-buscador = Busca(grafo);
-#print(str(buscador.vertices)[1:-1].replace(', ','')); #print chatinho pra kct
-#print(buscador.bfs(Vertice(2))) 
-#print(buscador.dfs(Vertice(3))) 
-buscador.dfs(Vertice(3))
+""" Testes para matriz de adjacência """
+
+grafo_em_matriz = MatrizAdj(n);
+grafo_em_matriz.inserir_arestas(arestas);
+#grafo_em_matriz.mostra_matriz();
+#print(grafo_em_matriz.percorrer_vizinhos(3));
+matriz_busca = Busca(grafo_em_matriz);
+#print(matriz_busca.vertices);
+
+print(matriz_busca.bfs(Vertice(5)),'\n')
+
+
+""" Testes para vetor de adjacências """
+
+grafo_em_vetor = VetorAdj(n, arestas);
+vetor_adj_busca = Busca(grafo_em_vetor);
+#print(str(vetor_adj_busca.vertices)[1:-1].replace(', ','')); #print chatinho pra kct
+print(vetor_adj_busca.bfs(Vertice(5))) 
+#print(vetor_adj_busca.dfs(Vertice(5))) 
+#vetor_adj_busca.dfs(Vertice(1))
     
         

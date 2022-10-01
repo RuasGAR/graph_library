@@ -22,12 +22,12 @@ class MatrizAdj:
         # por estarmos com uma matriz triangular inferior, vamos pegar a linha daquele vértice 
         # nessa linha, precisamos percorrer e gravar o índice de todos os vértices que tiverem valor igual a 1
         vizinhos = [];
-        for i in range(self.matriz[valor_vertice]):
-            if(self.matriz[valor_vertice][i] == 1):
-                vizinhos.append(i);
+        for i in range(len(self.matriz)):
+            if(self.matriz[valor_vertice-1][i] == 1):
+                vizinhos.append(i+1); #precisa de mais um porque i - o índice - começa em 0
         return vizinhos;
 
-""" caminho = "test.txt"
+""" caminho = "../test.txt"
 num, aresta = ler_arquivo(caminho)
 
 matriz_teste = MatrizAdj(num)
