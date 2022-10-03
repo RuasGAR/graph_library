@@ -25,6 +25,7 @@ class VetorAdj:
 
         #Percorrer todas as arestas, criando um elemento inicial para cada vértice
         self.container = [ElementoInicialVetorAdj(x) for x in range(1,num_vertices+1)]
+        self.num_vertices = num_vertices;
 
         # Agora, vamos preencher os vizinhos de acordo com as arestas
         # Arestas: [(1, 2), (2, 5), (5, 3), (4, 5), (1, 5)]
@@ -47,6 +48,33 @@ class VetorAdj:
     def imprimir(self):
         for elemento in self.container:
             print(elemento)
+
+    def grau_maximo(self):
+        max = len(self.container[0].vetor_vizinhos);
+        for i in range(1,len(self.container)):
+            grau = len(self.container[i].vetor_vizinhos); 
+            if(grau > max):
+                max = grau;
+        return max;
+                
+    def grau_minimo(self):
+        min = len(self.container[0].vetor_vizinhos);
+        for i in range(1,len(self.container)):
+            grau = len(self.container[i].vetor_vizinhos); 
+            if(grau < min):
+                min = grau;
+        return min;
+
+    def grau_medio(self):
+        somatorio = 0;
+        for i in range(len(self.container)):
+            somatorio += len(self.container[i].vetor_vizinhos);
+        return (somatorio / self.num_vertices);
+    
+    def grau_mediana(self):
+        return len(self.container[(self.num_vertices//2)].vetor_vizinhos);
+        
+
 
 # ==========================================================================================================================
 # Testes

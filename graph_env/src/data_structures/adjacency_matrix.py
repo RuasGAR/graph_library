@@ -1,3 +1,4 @@
+from functools import reduce
 from file_utils.file_handlers import ler_arquivo
 
 
@@ -26,6 +27,43 @@ class MatrizAdj:
             if(self.matriz[valor_vertice-1][i] == 1):
                 vizinhos.append(i+1); #precisa de mais um porque i - o índice - começa em 0
         return vizinhos;
+
+    def grau_maximo(self):
+        max = 0;
+        for i in range(self.num_vertices):
+            grau = 0;
+            for j in range(self.num_vertices):
+                grau += self.matriz[i][j];
+            if(grau > max):
+                max = grau;
+        return max;
+
+    def grau_minimo(self):
+        min = 0;
+        for i in range(self.num_vertices):
+            grau = 0;
+            for j in range(self.num_vertices):
+                grau += self.matriz[i][j];
+            if(grau < min):
+                min = grau;
+        return min;
+
+    def grau_medio(self):
+        somatorio = 0;
+        for i in range(self.num_vertices):
+            grau = 0;
+            for j in range(self.num_vertices):
+                grau += self.matriz[i][j];
+            somatorio += grau;
+
+        return (somatorio/self.num_vertices);
+    
+    def grau_mediana(self):
+        
+        mediana = 0;
+        for i in range(self.num_vertices):
+            mediana += self.matriz[self.num_vertices//2][i];
+        return mediana
 
 """ caminho = "../test.txt"
 num, aresta = ler_arquivo(caminho)
