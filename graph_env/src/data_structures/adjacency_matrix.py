@@ -1,4 +1,5 @@
 from functools import reduce
+from math import ceil, floor
 from file_utils.file_handlers import ler_arquivo
 
 
@@ -59,7 +60,23 @@ class MatrizAdj:
         return (somatorio/self.num_vertices);
     
     def grau_mediana(self):
-        pass
+        
+        graus = [];
+
+        # Calculando os graus
+        for i in range(self.num_vertices):
+            grau_vertice = int(reduce(lambda x,soma: soma+x, self.matriz[i]));
+            graus.append(grau_vertice);
+
+        # Ordenando
+        graus.sort()
+
+        # Calculando mediana
+        if(self.num_vertices%2 != 0):
+            return graus[self.num_vertices//2];
+        else:
+            return (graus[floor(self.num_vertices/2)] + graus[ceil(self.num_vertices/2)]) / 2 
+
 
 
 """ caminho = "../test.txt"
