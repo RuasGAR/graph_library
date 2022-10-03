@@ -4,6 +4,8 @@ sys.path.insert(1,'/home/ruasgar/Bureau/trabalho_grafos/graph_env/src');
 
 from data_structures.adjacency_vector import VetorAdj
 from data_structures.adjacency_matrix import MatrizAdj
+from data_structures.search_vertex import Vertice
+from searches.busca import Busca
 from file_utils.file_handlers import ler_arquivo
 
 
@@ -19,6 +21,17 @@ def grau_medio(grafo):
 def grau_mediana(grafo):
     return grafo.grau_mediana();
 
+def distancia(grafo, origem, destino):
+
+    explorados = Busca(grafo).bfs(origem);
+    
+    if(explorados[origem.valor-1] and explorados[destino.valor-1]):
+        return (explorados[destino.valor-1].nivel - explorados[origem.valor-1].nivel)
+    
+    return None;
+
+
+
 n, arestas = ler_arquivo("graph_env/src/test.txt")
 
 
@@ -30,6 +43,7 @@ print(f"Max: {grau_maximo(grafo_em_matriz)}\n");
 print(f"Min: {grau_minimo(grafo_em_matriz)}\n");
 print(f"Médio: {grau_medio(grafo_em_matriz)}\n");
 print(f"Mediana: {grau_mediana(grafo_em_matriz)}\n");
+print(f"Distância entre 3 e 1: {distancia(grafo_em_matriz,Vertice(3),Vertice(1))}")
 
 """ Testes para vetor de adjacências """
 
