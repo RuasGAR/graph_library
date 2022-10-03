@@ -30,7 +30,26 @@ def distancia(grafo, origem, destino):
     
     return None;
 
+def diametro(grafo):
 
+    # Tem que chamar a função de distância para cada combinação de vértices
+    # Dá pra ser feito com dois loops. Atualizar a maior se for necessária.
+
+    diametro = 0;
+    for i in range(grafo.num_vertices):
+        for j in range(grafo.num_vertices):
+            nova_distancia = distancia(grafo, Vertice(i), Vertice(j));
+            if(nova_distancia > diametro):
+                diametro = nova_distancia;
+    return diametro
+
+def componentes_conexas():
+    # criar uma lista para armazenar as componentes conexas;
+    # vai precisar do acesso às marcações que foram feitas anteriormente, então a instância da busca deve ser a mesma.
+    # saberemos que terminou caso todos os nós tenham sido marcados (e se não tiver conectividade?; tomar cuidado com esse caso);
+
+    
+    pass
 
 n, arestas = ler_arquivo("graph_env/src/test.txt")
 
@@ -44,6 +63,7 @@ print(f"Min: {grau_minimo(grafo_em_matriz)}\n");
 print(f"Médio: {grau_medio(grafo_em_matriz)}\n");
 print(f"Mediana: {grau_mediana(grafo_em_matriz)}\n");
 print(f"Distância entre 3 e 1: {distancia(grafo_em_matriz,Vertice(3),Vertice(1))}")
+print(f"Diâmetro: {diametro(grafo_em_matriz)}");
 
 """ Testes para vetor de adjacências """
 
