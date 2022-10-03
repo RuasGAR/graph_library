@@ -1,3 +1,5 @@
+from math import floor, ceil
+
 class ElementoInicialVetorAdj:
     
     def __init__(self, valor) -> None:
@@ -42,8 +44,7 @@ class VetorAdj:
         #print(self.container)
 
     def percorrer_vizinhos(self,valor_vertice:int):
-        if(valor_vertice > 0):
-            return self.container[valor_vertice-1].vetor_vizinhos;
+        return self.container[valor_vertice-1].vetor_vizinhos;
     
     def imprimir(self):
         for elemento in self.container:
@@ -72,8 +73,17 @@ class VetorAdj:
         return (somatorio / self.num_vertices);
     
     def grau_mediana(self):
-        pass
-        
+        # Primeiro, precisamos pegar todos os graus. Podemos fazer isso com uma abordagem funcional
+        graus = list(map(lambda vertice:len(vertice.vetor_vizinhos),self.container));
+        # Ordenando a lista
+        graus.sort(); # Retorna None;
+        # Calculando a mediana:
+        if(self.num_vertices%2 != 0):
+            return graus[self.num_vertices//2];
+        else:
+            return (graus[floor(self.num_vertices/2)] + graus[ceil(self.num_vertices/2)]) / 2 
+
+
 
 
 # ==========================================================================================================================
