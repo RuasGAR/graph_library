@@ -59,11 +59,8 @@ class MatrizAdj:
         return (somatorio/self.num_vertices);
     
     def grau_mediana(self):
-        
-        mediana = 0;
-        for i in range(self.num_vertices):
-            mediana += self.matriz[self.num_vertices//2][i];
-        return mediana
+        pass
+
 
 """ caminho = "../test.txt"
 num, aresta = ler_arquivo(caminho)

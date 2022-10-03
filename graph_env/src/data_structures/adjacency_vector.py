@@ -72,7 +72,7 @@ class VetorAdj:
         return (somatorio / self.num_vertices);
     
     def grau_mediana(self):
-        return len(self.container[(self.num_vertices//2)].vetor_vizinhos);
+        pass
         
 
 
