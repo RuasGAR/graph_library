@@ -84,8 +84,6 @@ class VetorAdj:
             return (graus[floor(self.num_vertices/2)] + graus[ceil(self.num_vertices/2)]) / 2 
 
 
-
-
 # ==========================================================================================================================
 # Testes
 

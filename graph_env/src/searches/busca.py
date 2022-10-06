@@ -13,14 +13,16 @@ class Busca:
     def __init__(self,grafo) -> None:
         self.grafo = grafo;
         self.vertices = [];
+       
         if(isinstance(grafo, VetorAdj)):
             self.vertices = [Vertice(x.valor) for x in grafo.container] # Quantidade de elementos no vetor container é n 
         elif(isinstance(grafo,MatrizAdj)):
             self.vertices = [Vertice(x+1) for x in range(len(grafo.matriz))] # Quantidade de linhas da matriz é n
 
-    def bfs(self, vertice_s):
+    def bfs(self, vertice_s, retorna_todos=False):
         # Desmarcar todos os vértices
         # Por natureza, já são desmarcados, mas alterando por referência, é sempre bom rever
+
         for no in self.vertices:
             no.marcador = False;
             no.pai = None;
@@ -45,7 +47,11 @@ class Busca:
                     self.vertices[w-1].pai = v.valor; #o ideal seria o endereço de v, mas...
                     fila.insert(0,self.vertices[w-1])
 
-        return list(filter(lambda x: x.marcador == True, self.vertices));
+        if(retorna_todos == True):
+            return self.vertices;
+        else:
+            return list(filter(lambda x: x.marcador == True, self.vertices));
+
 
     def dfs(self, vertice_s):
         #dermarcando todos os vértices

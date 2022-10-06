@@ -1,3 +1,4 @@
+from asyncio.windows_utils import BUFSIZE
 import sys
     # caution: path[0] is reserved for script path (or '' in REPL)
 sys.path.insert(1,'/home/ruasgar/Bureau/trabalho_grafos/graph_env/src');
@@ -7,6 +8,7 @@ from data_structures.adjacency_matrix import MatrizAdj
 from data_structures.search_vertex import Vertice
 from searches.busca import Busca
 from file_utils.file_handlers import ler_arquivo
+from copy import deepcopy
 
 
 def grau_maximo(grafo):
@@ -43,7 +45,54 @@ def diametro(grafo):
                 diametro = nova_distancia;
     return diametro
 
-def componentes_conexas():
+def componentes_conexas(grafo):
+    
+    # Estruturas auxiliares
+        # Lista de componentes conexas
+        # Dicionário relacionando cada uma das componentes ao seu respectivo tamanho
+
+    componentes_conexas = [];
+
+
+    # Instância da busca, para que tenhamos os vértices com as marcações e possamos, intuitivamente, realizar as buscas
+    busca_em_grafo = Busca(grafo);
+    
+    primeira_componente = busca_em_grafo.bfs(busca_em_grafo.vertices[0], retorna_todos=True);
+    
+    # Atualizamos os dados do objeto do primeiro componente na lista
+    componentes_conexas[0].valor = primeira_componente;
+    componentes_conexas[0].tamanho = len(primeira_componente);
+
+
+    # O(n) e dobra o custo de memória
+    # Porém, removemos as referências para os vértices "originais" e não precisamos nos preocupar em alterá-los diretamente
+    # Além disso, nesse formato, adotamos uma abordagem que leva o maior custo no início do algoritmo, e vai aliviando
+    # espaço conforme as componentes forem descobertas
+    desmarcados = deepcopy(busca_em_grafo.vertices);  
+
+    while (len(desmarcados) > 0):
+
+        # pega componente
+        componente = busca_em_grafo.bfs(desmarcados[0], retorna_todos=True);    
+        
+        # Componentes serão armazenadas no formato deste objeto
+        componentes_conexas.append({ "valor":componente, "tamanho":len(componente)});
+        
+        # remove os vertices da cópia que forem marcados
+        for vertice in desmarcados:
+            if(vertice in componente):
+                del vertice;
+    
+    #
+
+
+    
+
+
+     
+
+     
+    
     # criar uma lista para armazenar as componentes conexas;
     # vai precisar do acesso às marcações que foram feitas anteriormente, então a instância da busca deve ser a mesma.
     # saberemos que terminou caso todos os nós tenham sido marcados (e se não tiver conectividade?; tomar cuidado com esse caso);
