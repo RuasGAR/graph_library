@@ -67,13 +67,13 @@ class VetorAdj:
                 min = grau;
         return min;
 
-    def grau_medio(self) -> int:
+    def grau_medio(self) -> float:
         somatorio:int = 0;
         for i in range(len(self.container)):
             somatorio += len(self.container[i].vetor_vizinhos);
         return (somatorio / self.num_vertices);
     
-    def grau_mediana(self) -> int:
+    def grau_mediana(self) -> float:
         # Primeiro, precisamos pegar todos os graus. Podemos fazer isso com uma abordagem funcional
         graus:List[int] = list(map(lambda vertice:len(vertice.vetor_vizinhos),self.container));
         # Ordenando a lista
@@ -88,8 +88,8 @@ class VetorAdj:
 # ==========================================================================================================================
 # Testes
 
-teste_vetor_adj = VetorAdj(5,[(1, 2), (2, 5), (5, 3), (4, 5), (1, 5)])
+""" teste_vetor_adj = VetorAdj(5,[(1, 2), (2, 5), (5, 3), (4, 5), (1, 5)])
 #teste_vetor_adj.imprimir()
 print("Vizinhos de 2: " + str(teste_vetor_adj.percorrer_vizinhos(2)));
-print("Vizinhos de 5: " + str(teste_vetor_adj.percorrer_vizinhos(5)));
+print("Vizinhos de 5: " + str(teste_vetor_adj.percorrer_vizinhos(5))); """
 
