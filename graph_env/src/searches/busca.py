@@ -47,10 +47,7 @@ class Busca:
                     self.vertices[w-1].pai = v.valor; #o ideal seria o endereço de v, mas...
                     fila.insert(0,self.vertices[w-1])
 
-        if(retorna_todos == True):
-            return self.vertices;
-        else:
-            return list(filter(lambda x: x.marcador == True, self.vertices));
+        return list(filter(lambda x: x.marcador == True, self.vertices));
 
 
     def dfs(self, vertice_s):
