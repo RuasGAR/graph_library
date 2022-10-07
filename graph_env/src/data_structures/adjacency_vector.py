@@ -1,10 +1,11 @@
 from math import floor, ceil
+from typing import List, Tuple
 
 class ElementoInicialVetorAdj:
     
-    def __init__(self, valor) -> None:
-        self.valor = valor
-        self.vetor_vizinhos = []
+    def __init__(self, valor:int) -> None:
+        self.valor:int = valor
+        self.vetor_vizinhos:List[int] = []
 
     def __str__(self) -> str:
         string = f"Nó {self.valor}: -> " 
@@ -23,11 +24,11 @@ print(elemento); """
 
 class VetorAdj:
     
-    def __init__(self,num_vertices,arestas):
+    def __init__(self,num_vertices:int, arestas:List[Tuple[int]]) -> None:
 
         #Percorrer todas as arestas, criando um elemento inicial para cada vértice
-        self.container = [ElementoInicialVetorAdj(x) for x in range(1,num_vertices+1)]
-        self.num_vertices = num_vertices;
+        self.container:List[ElementoInicialVetorAdj.__class__] = [ElementoInicialVetorAdj(x) for x in range(1,num_vertices+1)]
+        self.num_vertices:int = num_vertices;
 
         # Agora, vamos preencher os vizinhos de acordo com as arestas
         # Arestas: [(1, 2), (2, 5), (5, 3), (4, 5), (1, 5)]
@@ -43,38 +44,38 @@ class VetorAdj:
             self.container[par[1]-1].vetor_vizinhos.append(par[0]) 
         #print(self.container)
 
-    def percorrer_vizinhos(self,valor_vertice:int):
+    def percorrer_vizinhos(self,valor_vertice:int) -> List[int]:
         return self.container[valor_vertice-1].vetor_vizinhos;
     
-    def imprimir(self):
+    def imprimir(self) -> None:
         for elemento in self.container:
             print(elemento)
 
-    def grau_maximo(self):
-        max = len(self.container[0].vetor_vizinhos);
+    def grau_maximo(self) -> int:
+        max:int = len(self.container[0].vetor_vizinhos);
         for i in range(1,len(self.container)):
-            grau = len(self.container[i].vetor_vizinhos); 
+            grau:int = len(self.container[i].vetor_vizinhos); 
             if(grau > max):
                 max = grau;
         return max;
                 
-    def grau_minimo(self):
-        min = len(self.container[0].vetor_vizinhos);
+    def grau_minimo(self) -> int:
+        min:int = len(self.container[0].vetor_vizinhos);
         for i in range(1,len(self.container)):
-            grau = len(self.container[i].vetor_vizinhos); 
+            grau:int = len(self.container[i].vetor_vizinhos); 
             if(grau < min):
                 min = grau;
         return min;
 
-    def grau_medio(self):
-        somatorio = 0;
+    def grau_medio(self) -> int:
+        somatorio:int = 0;
         for i in range(len(self.container)):
             somatorio += len(self.container[i].vetor_vizinhos);
         return (somatorio / self.num_vertices);
     
-    def grau_mediana(self):
+    def grau_mediana(self) -> int:
         # Primeiro, precisamos pegar todos os graus. Podemos fazer isso com uma abordagem funcional
-        graus = list(map(lambda vertice:len(vertice.vetor_vizinhos),self.container));
+        graus:List[int] = list(map(lambda vertice:len(vertice.vetor_vizinhos),self.container));
         # Ordenando a lista
         graus.sort(); # Retorna None;
         # Calculando a mediana:
@@ -87,8 +88,8 @@ class VetorAdj:
 # ==========================================================================================================================
 # Testes
 
-""" teste_vetor_adj = VetorAdj(5,[(1, 2), (2, 5), (5, 3), (4, 5), (1, 5)])
+teste_vetor_adj = VetorAdj(5,[(1, 2), (2, 5), (5, 3), (4, 5), (1, 5)])
 #teste_vetor_adj.imprimir()
 print("Vizinhos de 2: " + str(teste_vetor_adj.percorrer_vizinhos(2)));
-print("Vizinhos de 5: " + str(teste_vetor_adj.percorrer_vizinhos(5))); """
+print("Vizinhos de 5: " + str(teste_vetor_adj.percorrer_vizinhos(5)));
 
