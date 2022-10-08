@@ -89,22 +89,22 @@ def componentes_conexas(grafo):
 
     return componentes_conexas;
 
-n, arestas = ler_arquivo("graph_env/src/test.txt")
+n, arestas = ler_arquivo("graph_env/src/8_vertex_graph.txt")
 
 
 # Testes para matriz de adjacência
 
-grafo_em_matriz = MatrizAdj(n);
-grafo_em_matriz.inserir_arestas(arestas);
+#grafo_em_matriz = MatrizAdj(n);
+#grafo_em_matriz.inserir_arestas(arestas);
 """ print(f"Max: {grau_maximo(grafo_em_matriz)}\n");
 print(f"Min: {grau_minimo(grafo_em_matriz)}\n");
 print(f"Médio: {grau_medio(grafo_em_matriz)}\n");
 print(f"Mediana: {grau_mediana(grafo_em_matriz)}\n");
-print(f"Distância entre 3 e 1: {distancia(grafo_em_matriz,Vertice(3),Vertice(1))}")
+print(f"Distância entre 4 e 1: {distancia(grafo_em_matriz,Vertice(4),Vertice(1))}")
 print(f"Diâmetro: {diametro(grafo_em_matriz)}"); """
-print(f"Componentes Conexas: {componentes_conexas(grafo_em_matriz)}");
+#print(f"Componentes Conexas: {componentes_conexas(grafo_em_matriz)}");
 
-#Testes para vetor de adjacências
+# Testes para vetor de adjacências
 
 """ grafo_em_vetor = VetorAdj(n, arestas);
 #print(str(vetor_adj_busca.vertices)[1:-1].replace(', ','')); #print chatinho pra kct
