@@ -80,10 +80,10 @@ class MatrizAdj:
 
 # Teste
 
-""" num = 5;
+num = 5;
 arestas = [(1, 2), (2, 5), (5, 3), (4, 5), (1, 5)];
 
-matriz_teste = MatrizAdj(num)
+""" matriz_teste = MatrizAdj(num)
 matriz_teste.inserir_arestas(arestas) """
 #matriz_teste.mostra_matriz()
 #print(matriz_teste.grau_minimo());
