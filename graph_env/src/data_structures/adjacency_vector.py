@@ -73,7 +73,7 @@ class VetorAdj:
             somatorio += len(self.container[i].vetor_vizinhos);
         return (somatorio / self.num_vertices);
     
-    def grau_mediana(self) -> float:
+    def grau_mediana(self) -> int:
         # Primeiro, precisamos pegar todos os graus. Podemos fazer isso com uma abordagem funcional
         graus:List[int] = list(map(lambda vertice:len(vertice.vetor_vizinhos),self.container));
         # Ordenando a lista
