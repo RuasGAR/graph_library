@@ -26,6 +26,7 @@ class MatrizAdj:
         for i in range(len(self.matriz)):
             if(self.matriz[valor_vertice-1][i] == 1):
                 vizinhos.append(i+1); #precisa de mais um porque i - o índice - começa em 0
+        
         return vizinhos;
 
     def grau_maximo(self) -> int:
