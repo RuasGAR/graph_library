@@ -1,6 +1,6 @@
 
-import sys
 from typing import List, Union
+import sys
     # caution: path[0] is reserved for script path (or '' in REPL)
 sys.path.insert(1,'/home/ruasgar/Bureau/trabalho_grafos/graph_env/src');
 
@@ -96,7 +96,7 @@ class Busca:
 
         return list(filter(lambda x: x.marcador == True, self.vertices));
 
-n, arestas = ler_arquivo("graph_env/src/8_vertex_graph.txt")
+#n, arestas = ler_arquivo("graph_env/src/searches/8_vertex_graph.txt")
 
 
 """ Testes para matriz de adjacência """
@@ -119,13 +119,13 @@ n, arestas = ler_arquivo("graph_env/src/8_vertex_graph.txt")
 
 """ Testes para vetor de adjacências """
 
-grafo_em_vetor = VetorAdj(n, arestas);
-vetor_adj_busca = Busca(grafo_em_vetor);
+#grafo_em_vetor = VetorAdj(n, arestas);
+#vetor_adj_busca = Busca(grafo_em_vetor);
 #print(str(vetor_adj_busca.vertices)[1:-1].replace(', ',''));
 
 # Teste na BFS
 # Ordem é ligeramente diferente por conta da ordem de leitura das arestas e sua consequente inserção nos vetores de vizinhos.
-#print(vetor_adj_busca.bfs(Vertice(1))) 
+#print(vetor_adj_busca.bfs(Vertice(1))); 
 
 # Teste na DFS
 # print(vetor_adj_busca.dfs(Vertice(4))); 

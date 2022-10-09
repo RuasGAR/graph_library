@@ -6,7 +6,7 @@ def ler_arquivo(caminho:str) -> None:
     numero_vertices:int;
     arestas:List[Tuple(int)] = [];
     
-    with open(path.join(getcwd(),caminho), 'r') as file:
+    with open(path.join("graph_env/src/file_utils/examples",caminho), 'r') as file:
         linhas = file.readlines();
         numero_vertices = int(linhas[0]);
         for linha in linhas[1:]:
