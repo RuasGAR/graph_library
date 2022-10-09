@@ -8,7 +8,7 @@ class MatrizAdj:
     def __init__(self, num_vertices:int) -> None: 
         # criação dos espaços da matriz
         self.num_vertices:int = num_vertices
-        self.matriz:List[List[int]] = np.zeros((num_vertices,num_vertices),dtype=int); #[[0]*self.num_vertices for i in range(self.num_vertices)]
+        self.matriz:List[List[int]] = np.zeros((num_vertices,num_vertices),dtype=np.int32); #[[0]*self.num_vertices for i in range(self.num_vertices)]
     
     def inserir_arestas(self, arestas:List[Tuple[int]]):
         # modifica o valor da matriz de 0 para 1 quando existir uma aresta (a,b)
