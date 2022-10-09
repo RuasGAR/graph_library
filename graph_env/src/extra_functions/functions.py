@@ -1,3 +1,4 @@
+from timeit import timeit
 from typing import List, Mapping, Union
 
 import sys
@@ -5,7 +6,7 @@ import sys
 import numpy as np
 from math import inf, isinf
 
-    # caution: path[0] is reserved for script path (or '' in REPL)
+# caution: path[0] is reserved for script path (or '' in REPL)
 sys.path.insert(1,'/home/ruasgar/Bureau/trabalho_grafos/graph_env/src');
 
 from data_structures.adjacency_vector import VetorAdj
@@ -74,16 +75,9 @@ def componentes_conexas(grafo:Union[MatrizAdj, VetorAdj]) -> List[Mapping[List[V
 
     # Instância da busca, para que tenhamos os vértices com as marcações e possamos, intuitivamente, realizar as buscas
     busca_em_grafo:Busca = Busca(grafo);
-    
-    """ primeira_componente = busca_em_grafo.bfs(busca_em_grafo.vertices[0]);
-    
-    # Atualizamos os dados do objeto do primeiro componente na lista
-    componentes_conexas[0]["valor"] = primeira_componente;
-    componentes_conexas[0]["tamanho"] = len(primeira_componente); """
 
 
     # O(n) e dobra o custo de memória
-    # Porém, removemos as referências para os vértices "originais" e não precisamos nos preocupar em alterá-los diretamente
     # Além disso, nesse formato, adotamos uma abordagem que leva o maior custo no início do algoritmo, e vai aliviando
     # espaço conforme as componentes forem descobertas
     desmarcados:List[Vertice] = list(map(lambda v: v.valor,deepcopy(busca_em_grafo.vertices)));  
@@ -110,9 +104,10 @@ def componentes_conexas(grafo:Union[MatrizAdj, VetorAdj]) -> List[Mapping[List[V
     return componentes_conexas;
 
 
+
 ###### TEST ZONE !!!! ########################################
 
-n, arestas = ler_arquivo("graph_env/src/8_vertex_graph.txt")
+#n, arestas = ler_arquivo("graph_env/src/examples/8_vertex_graph.txt")
 
 # Testes para matriz de adjacência
 
@@ -130,7 +125,8 @@ print(f"Distância entre 4 e 1: {distancia(grafo_em_matriz,4,1)}")
 
 # Testes para vetor de adjacências
 
-grafo_em_vetor = VetorAdj(n, arestas);
+#grafo_em_vetor = VetorAdj(n, arestas);
+
 #print(str(vetor_adj_busca.vertices)[1:-1].replace(', ',''));
 #print(f"\nMax: {grau_maximo(grafo_em_vetor)}\n");
 #print(f"Min: {grau_minimo(grafo_em_vetor)}\n");

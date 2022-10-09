@@ -1,0 +1,7 @@
+*/__pycache__
+lib
+lib64
+examples
+include
+share
+pyenv.cfg
