@@ -1,7 +1,3 @@
-# import sys
-# caution: path[0] is reserved for script path (or '' in REPL)
-# sys.path.insert(1,'/home/ruasgar/Bureau/trabalho_grafos/graph_env/src');
-
 from typing import List, Union
 from numpy import random
 from data_structures.adjacency_vector import VetorAdj
@@ -16,8 +12,7 @@ import os
 
 def __main__():
 
-    descobrir_pais(6)
-    # grafo, n, arestas = repr_e_leitura(6, "vetor")
+    grafo, n, arestas = repr_e_leitura(6, "vetor")
 
 
 """
