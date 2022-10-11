@@ -10,19 +10,18 @@ from data_structures.adjacency_matrix import MatrizAdj
 from searches.busca import Busca
 from file_utils.file_handlers import ler_arquivo
 from extra_functions import functions
-from time import time
+from time import sleep, time
 import os
 
 
 def __main__():
 
-    print("Comecei a main")
-
-    print_informacao_grafo("vetor")
+    descobrir_pais(6)
+    # grafo, n, arestas = repr_e_leitura(6, "vetor")
 
 
 """
-    TESTES PARA A QUESTÃO 2 DOS ESTUDOS DE CASO
+    TESTES DE IMPRESSÃO PARA OS TEMPOS MÉDIOS
 
     tempos_medios_matriz = questao_2(4, "matriz")
     tempos_medios_vetor = questao_2(4, "vetor")
@@ -46,13 +45,24 @@ def __main__():
     ) 
 """
 
+# Função auxiliar, que pode ser adaptada para pedido de entrada
+def repr_e_leitura(
+    grafo_num: int, grafo_repr: str
+) -> List[Union[List[Union[MatrizAdj, VetorAdj]], int]]:
 
-# Estudos de Caso
+    n, arestas = ler_arquivo(f"grafo_{grafo_num}.txt")
 
-# Ponto 2:
+    if grafo_repr == "matriz":
+        grafo = MatrizAdj(n)
+        grafo.inserir_arestas(arestas)
+    elif grafo_repr == "vetor":
+        grafo = VetorAdj(n, arestas)
 
-# Grafo 2
-def questao_2(grafo_num: int, graph_repr: str):
+    return [grafo, n, len(arestas)]
+
+
+# QUESTÕES 2 E 3
+def tempos_medios(grafo_num: int, graph_repr: str):
 
     # Lê os arquivos
     n, arestas = ler_arquivo(f"grafo_{grafo_num}.txt")
@@ -62,7 +72,7 @@ def questao_2(grafo_num: int, graph_repr: str):
     todos_tempos_deep = []
     vertices_iniciais = []
     for i in range(1000):
-        vertices_iniciais.append(random.randint(0, 100054))
+        vertices_iniciais.append(random.randint(0, n))
 
     # Cria o grafo na representação pedida
     if graph_repr == "matriz":
@@ -74,9 +84,9 @@ def questao_2(grafo_num: int, graph_repr: str):
     # Instanciando busca para o grafo
     busca_em_grafo = Busca(grafo)
 
-    for num in range(10):
+    for num in range(1000):
 
-        print(num)
+        # print(num) - apenas para monitoramento
 
         # BUSCA EM LARGURA
         tempo_inicial_bfs = time()
@@ -100,46 +110,12 @@ def questao_2(grafo_num: int, graph_repr: str):
     return [tempo_medio_bfs, tempo_medio_deep]
 
 
-def repr_e_leitura(
-    grafo_num: int, grafo_repr: str
-) -> List[Union[List[Union[MatrizAdj, VetorAdj]], int]]:
-
-    n, arestas = ler_arquivo(f"grafo_{grafo_num}.txt")
-
-    if grafo_repr == "matriz":
-        grafo = MatrizAdj(n)
-        grafo.inserir_arestas(arestas)
-    elif grafo_repr == "vetor":
-        grafo = VetorAdj(n, arestas)
-
-    return [grafo, n, len(arestas)]
-
-
-def questao_distancias(grafo_num: int, grafo_repr: str):
-
-    print(
-        "Estou analisando as distâncias do grafo ",
-        grafo_num,
-        "com a representação de ",
-        grafo_repr,
-    )
-
-    pares = [(10, 20), (10, 30), (20, 30)]
-
-    grafo = repr_e_leitura(grafo_num, grafo_repr)
-
-    for i in range(0, 3):
-        resposta = functions.distancia(grafo, pares[i][0], pares[i][1])
-        print(
-            f"A distância entre {pares[i][0]} e {pares[i][1]} no grafo {grafo_num} é de {resposta}!\n"
-        )
-
-
+# QUESTÃO 4
 def descobrir_pais(grafo_num: int):
 
     print("Vou começar a descobrir os pais no grafo", grafo_num)
 
-    grafo = repr_e_leitura(grafo_num, "vetor")
+    grafo, n, arestas = repr_e_leitura(grafo_num, "vetor")
 
     pais_a_determinar = [10, 20, 30]
     vertices_iniciais = [1, 2, 3]
@@ -166,23 +142,42 @@ def descobrir_pais(grafo_num: int):
                 print(u)
 
 
+# QUESTÃO 5
+def questao_distancias(grafo_num: int, grafo_repr: str):
+
+    print(
+        "Estou analisando as distâncias do grafo ",
+        grafo_num,
+        "com a representação de ",
+        grafo_repr,
+    )
+
+    pares = [(10, 20), (10, 30), (20, 30)]
+
+    grafo = repr_e_leitura(grafo_num, grafo_repr)
+
+    for i in range(0, 3):
+        resposta = functions.distancia(grafo, pares[i][0], pares[i][1])
+        print(
+            f"A distância entre {pares[i][0]} e {pares[i][1]} no grafo {grafo_num} é de {resposta}!\n"
+        )
+
+
+# QUESTÃO 6
 def print_informacao_grafo(formato: str) -> None:
 
     for i in range(2, 7):
 
-        print("Tô lendo o grafo:", i)
         grafo, num_vertices, num_arestas = repr_e_leitura(i, formato)
         comp_conexas = functions.componentes_conexas(grafo)
 
         with open(os.path.join(os.getcwd(), f"grafo_{i}_output.txt"), "w") as file:
-            file.write(
-                f"Analisando grafo {num_vertices} na representação em {formato}."
-            )
+            file.write(f"Analisando grafo {i} na representação em {formato}.")
             file.write(f"Número de Vértices: {num_vertices}\n")
             file.write(f"Número de Arestas: {num_arestas}\n")
             file.write(f"Grau Máximo: {functions.grau_maximo(grafo)}\n")
             file.write(f"Grau Mínimo: {functions.grau_minimo(grafo)}\n")
-            file.write(f"Grau Médio: {functions.grau_medio(grafo)}")
+            file.write(f"Grau Médio: {functions.grau_medio(grafo)}\n")
             file.write(f"Mediana do Grau: {functions.grau_mediana(grafo)}\n")
             file.write(f"Quantidade de componentes conexas: {len(comp_conexas)}\n")
             file.write(
