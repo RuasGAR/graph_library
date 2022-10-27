@@ -4,6 +4,6 @@ lib64/
 */examples
 include/
 share/
-bin/
+/bin/
 pyenv.cfg
 */grafo_*.txt
