@@ -1,8 +1,8 @@
 */__pycache__
-lib
-lib64
+lib/
+lib64/
 */examples
-include
-share
+include/
+share/
 pyenv.cfg
 */grafo_*.txt
