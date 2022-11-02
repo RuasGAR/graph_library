@@ -1,3 +1,7 @@
+# import sys
+# caution: path[0] is reserved for script path (or '' in REPL)
+# sys.path.insert(1,'/home/ruasgar/Bureau/trabalho_grafos/graph_env/src');
+
 from typing import List, Union
 from numpy import random
 from data_structures.adjacency_vector import VetorAdj
@@ -6,7 +10,7 @@ from data_structures.adjacency_matrix import MatrizAdj
 from searches.busca import Busca
 from file_utils.file_handlers import ler_arquivo
 from extra_functions import functions
-from time import sleep, time
+from time import time
 import os
 
 
