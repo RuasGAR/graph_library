@@ -2,8 +2,5 @@
 /lib/
 /lib64/
 */examples
-/include/
 /share/
-/bin/
-/pyenv.cfg
 */grafo_*.txt
