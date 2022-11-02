@@ -1,6 +1,6 @@
-*/__pycache__
-/lib/
-/lib64/
-*/examples
-/share/
-*/grafo_*.txt
+graph_env/src/*/__pycache__
+graph_env/lib/
+graph_env/lib64/
+graph_env/src/*/examples
+graph_env/share/
+graph_env/*/grafo_*.txt
