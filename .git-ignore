@@ -4,3 +4,4 @@ graph_env/lib64/
 graph_env/src/*/examples
 graph_env/share/
 graph_env/*/grafo_*.txt
+graph_env/grafo_*.txt
