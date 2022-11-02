@@ -115,11 +115,11 @@ print("Vizinhos de 5: " + str(teste_vetor_adj.percorrer_vizinhos(5))); """
 
 # Segunda Parte (Dijkstra)
 
-teste_vetor_adj = VetorAdj(
+""" teste_vetor_adj = VetorAdj(
     5,
     [(1, 2, 0.1), (2, 5, 0.2), (5, 3, 5), (3, 4, -9.5), (4, 5, 2.3), (1, 5, 1)],
     tem_pesos=True,
 )
 # teste_vetor_adj.imprimir()
 print("Vizinhos de 2: " + str(teste_vetor_adj.percorrer_vizinhos(2)))
-print("Vizinhos de 5: " + str(teste_vetor_adj.percorrer_vizinhos(5)))
+print("Vizinhos de 5: " + str(teste_vetor_adj.percorrer_vizinhos(5))) """
