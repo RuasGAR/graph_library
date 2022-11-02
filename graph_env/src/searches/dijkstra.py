@@ -1,8 +1,6 @@
 import sys
 
-# caution: path[0] is reserved for script path (or '' in REPL)
 sys.path.insert(1, "C:/Users/gabri/Desktop/graph_library/graph_env/src")
-
 import numpy as np
 from typing import List, Set, Tuple, Union
 from data_structures.adjacency_vector import VetorAdj
