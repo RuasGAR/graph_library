@@ -2,7 +2,7 @@ import sys
 
 sys.path.insert(1, "C:/Users/gabri/Desktop/graph_library/graph_env/src")
 
-from typing import List, Tuple
+from typing import List, Tuple, Any
 from data_structures.search_vertex import Vertice
 from data_structures.adjacency_vector import VetorAdj
 from searches.dijkstra import dijkstra_com_heap, dijkstra_com_vetor
@@ -15,46 +15,52 @@ from time import time
 from functools import reduce
 
 # Auxiliar da questão 1
-def distancia_e_caminho_minimo(grafo: VetorAdj, vertice_final: int) -> Tuple[int, List]:
+def distancia_e_caminho_minimo(
+    grafo: VetorAdj, vertices_finais: List[int]
+) -> List[Tuple[int, Any]]:
 
     vertice_inicial = 10
 
     distancias, pais, S = dijkstra_com_vetor(grafo, vertice_inicial)
-    # [1,2,3,4,5]
-    # [5,4,3,2,1]
-    # [2,4,5,3,6]
 
-    # Distância
-    dist = distancias[vertice_final - 1]
+    conjunto_dist_e_min = []
 
-    # Reconstruindo caminho mínimo
-    caminho_minimo = deque()
+    for fim in vertices_finais:
+        print(f"calculando até {fim}")
+        # Distância
+        dist = distancias[fim - 1]
 
-    #   construindo o vértice
-    vertice_final = Vertice(vertice_final, dist)
-    vertice_final.pai = pais[vertice_final.valor - 1]
+        # Reconstruindo caminho mínimo
+        caminho_minimo = deque()
 
-    caminho_minimo.append(vertice_final)
+        #   construindo o vértice
+        fim = Vertice(fim, dist)
+        fim.pai = pais[fim.valor - 1]
 
-    pai = vertice_final.pai
+        caminho_minimo.append(fim)
 
-    while pai != -1:  # Denota que chegamos à raiz
+        pai = fim.pai
 
-        valor = pai
-        peso_acumulado = distancias[pai - 1]
+        while pai != -1:  # Denota que chegamos à raiz
 
-        vertice = Vertice(valor, peso_acumulado)
+            valor = pai
+            peso_acumulado = distancias[pai - 1]
 
-        pai = pais[valor - 1]
-        vertice.pai = pai
+            vertice = Vertice(valor, peso_acumulado)
 
-        caminho_minimo.appendleft(vertice)
+            pai = pais[valor - 1]
+            vertice.pai = pai
 
-    return (dist, caminho_minimo)
+            caminho_minimo.appendleft(vertice)
+
+        conjunto_dist_e_min.append((dist, caminho_minimo))
+
+    return conjunto_dist_e_min
 
 
-def questao1(fim: int, caminho_main: str) -> None:
+def questao1(num_grafo: int, caminho_main: str) -> None:
 
+    print(f"Grafo {num_grafo}")
     # Caminho de outputs
     output_path = Path(caminho_main.parents[0], "outputs")
 
@@ -63,25 +69,28 @@ def questao1(fim: int, caminho_main: str) -> None:
     except FileExistsError:
         pass
 
-    for i in range(1, 6):
-
         n, arestas = ler_arquivo(
-            Path(caminho_main / f"grafo_W_{i}_1.txt"),
+            Path(caminho_main / f"grafo_W_{num_grafo}_1.txt"),
             tem_pesos=True,
         )
 
         grafo = VetorAdj(n, arestas, tem_pesos=True)
 
-        # Chamada da Função que 'executa o enunciado'
-        dist, caminho_minimo = distancia_e_caminho_minimo(grafo, fim)
+    vertices_finais = [20, 30, 40, 50, 60]
+    # Chamada da Função que 'executa o enunciado'
+    dist_e_caminhos = distancia_e_caminho_minimo(grafo, vertices_finais)
 
-        with open(Path(output_path, f"graph_{i}_questao1.txt"), "a") as file:
-            file.write(f"Medindo do vértice 10 ao {fim}: \n")
-            file.write(f"Distância: " + "{0:.2f}".format(dist) + "\n")
+    with open(Path(output_path, f"graph_{num_grafo}_questao1.txt"), "a") as file:
+
+        for i in range(len(vertices_finais)):
+            file.write(f"Medindo do vértice 10 ao {vertices_finais[i]}: \n")
+            file.write(f"Distância: " + "{0:.2f}".format(dist_e_caminhos[i][0]) + "\n")
             file.write("Caminho Mínimo: \n")
-            for vertice in caminho_minimo:
+            print(f"Montando caminho mínimo...")
+            for vertice in dist_e_caminhos[i][1]:
                 file.write(str(vertice) + "\n")
             file.write("\n")
+            print(f"TERMINEI do 10 ao {vertices_finais[i]}, no grafo {num_grafo}...")
 
 
 def tempos_dijkstra(grafo: VetorAdj, k: int):
@@ -96,22 +105,26 @@ def tempos_dijkstra(grafo: VetorAdj, k: int):
 
     for index, s in enumerate(vertices_iniciais):
 
+        # Somente para monitoramento em execução
+        # print(f"Estamos no índice {index}...")
+
+        # Tempos Vetor
         tempo_inicial_vetor = time()
         dijkstra_com_vetor(grafo, s)
         tempo_final_vetor = time()
 
         diff_tempo_vetor = tempo_final_vetor - tempo_inicial_vetor
         tempos_vetor.append(diff_tempo_vetor)
+        print(f"Vetor: {diff_tempo_vetor}")
 
+        # Tempos Heap
         tempo_inicial_heap = time()
         dijkstra_com_heap(grafo, s)
         tempo_final_heap = time()
 
         diff_tempo_heap = tempo_final_heap - tempo_inicial_heap
         tempos_heap.append(diff_tempo_heap)
-
-        # Somente para monitoramento em execução
-        print(f"Estamos no índice {index}...")
+        print(f"Heap: {diff_tempo_heap}")
 
     return tempos_vetor, tempos_heap
 
@@ -120,7 +133,7 @@ def questao2(caminho_main: str):
 
     output_path = Path(caminho_main.parents[0], "outputs")
 
-    for i in range(1, 2):
+    for i in range(1, 6):
         n, arestas = ler_arquivo(
             Path(caminho_main / f"grafo_W_{i}_1.txt"),
             tem_pesos=True,
@@ -128,7 +141,8 @@ def questao2(caminho_main: str):
 
         grafo = VetorAdj(n, arestas, tem_pesos=True)
 
-        tempos_vetor, tempos_heap = tempos_dijkstra(grafo, 50)
+        print(f"Grafo {i}")
+        tempos_vetor, tempos_heap = tempos_dijkstra(grafo, 5)
 
         medio_vetor = sum(tempos_vetor) / len(tempos_vetor)
         medio_heap = sum(tempos_heap) / len(tempos_heap)

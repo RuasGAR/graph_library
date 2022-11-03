@@ -9,8 +9,8 @@ def __main__():
         getcwd(), "graph_env", "src", "estudos_de_caso", "grafos_parte2", "inputs"
     )
 
-    for fim in [20, 30, 40, 50, 60]:
-        questao1(fim, Path(getcwd(), caminho_grafos))
+    for num_grafo in range(1, 6):
+        questao1(num_grafo, Path(getcwd(), caminho_grafos))
 
     questao2(caminho_grafos)
 
