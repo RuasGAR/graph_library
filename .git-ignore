@@ -9,6 +9,7 @@ graph_env/src/estudos_de_caso/grafos_parte2
 graph_env/src/*/graph_teste_sem_pesos_negativos.txt
 graph_env/src/*/graph_W_*_1.txt
 graph_env/src/*/graph_*.txt
+graph_env/src/*/grafo_*.txt
 graph_env/src/*/inputs/
 graph_env/src/*/outputs/
 
