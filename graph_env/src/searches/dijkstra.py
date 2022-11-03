@@ -64,7 +64,7 @@ def dijkstra_com_vetor(
 
 def dijkstra_com_heap(
     grafo: VetorAdj, vertice_s: int
-) -> Tuple[List[int], List[Vertice]]:
+) -> Tuple[List[int], List[int], List[Vertice]]:
 
     # Dicionário que tem formato dict[valor] = prioridade; junto a métodos de heap e suporte à atualização de chaves
     distancias = heapdict.heapdict()
@@ -109,8 +109,42 @@ def dijkstra_com_heap(
     return (distancias, pais, np.array(list(conjunto_s), dtype=np.int32))
 
 
-def mst():
-    pass
+def mst(grafo: VetorAdj, vertice_s:int) -> Tuple[List[int], List[int], List[Vertice]]:
+
+    distancias = heapdict.heapdict()
+    pais: List[int] = [np.int32(-1) for x in range(grafo.num_vertices)]
+
+    for i in range(1, grafo.num_vertices + 1):
+        distancias[np.int32(i)] = np.inf
+
+    distancias[vertice_s] = np.int32(0)
+
+    conjunto_v: List[int] = set([np.int32(x) for x in range(1, grafo.num_vertices + 1)])
+    conjunto_s: Set[int] = set([])
+
+    diferenca_de_conjuntos = conjunto_v - conjunto_s
+
+    while len(diferenca_de_conjuntos) != np.int32(0) and bool(distancias):
+
+        diferenca_de_conjuntos = conjunto_v - conjunto_s
+
+        u, dist_u = distancias.popitem()
+        conjunto_s.add(u)
+
+        for vizinho in grafo.percorrer_vizinhos(u):
+
+            valor_vizinho = vizinho[0]
+            peso_u_vizinho = vizinho[1]
+
+            if valor_vizinho not in conjunto_s:
+                try:
+                    if distancias[valor_vizinho] > peso_u_vizinho:
+                        distancias[valor_vizinho] = np.float32(peso_u_vizinho)
+                        pais[valor_vizinho - 1] = u
+                except KeyError:
+                    continue
+
+    return (distancias, pais, np.array(list(conjunto_s), dtype=np.int32))
 
 
 ###############################################################################################################

@@ -2,60 +2,18 @@ import sys
 
 sys.path.insert(1, "C:/Users/gabri/Desktop/graph_library/graph_env/src")
 
-from typing import List, Tuple, Any
+from typing import List, Tuple, Any, Set, Union
 from data_structures.search_vertex import Vertice
 from data_structures.adjacency_vector import VetorAdj
-from searches.dijkstra import dijkstra_com_heap, dijkstra_com_vetor
+from searches.dijkstra import dijkstra_com_heap, dijkstra_com_vetor, mst
 from file_utils.file_handlers import ler_arquivo
 from collections import deque
 from pathlib import Path
-from os import mkdir, getcwd
+from os import mkdir
 from numpy import random
 from time import time
-from functools import reduce
 
-# Auxiliar da questão 1
-def distancia_e_caminho_minimo(
-    grafo: VetorAdj, vertices_finais: List[int]
-) -> List[Tuple[int, Any]]:
-
-    vertice_inicial = 10
-
-    distancias, pais, S = dijkstra_com_vetor(grafo, vertice_inicial)
-
-    conjunto_dist_e_min = []
-
-    for fim in vertices_finais:
-        print(f"calculando até {fim}")
-        # Distância
-        dist = distancias[fim - 1]
-
-        # Reconstruindo caminho mínimo
-        caminho_minimo = deque()
-
-        #   construindo o vértice
-        fim = Vertice(fim, dist)
-        fim.pai = pais[fim.valor - 1]
-
-        caminho_minimo.append(fim)
-
-        pai = fim.pai
-
-        while pai != -1:  # Denota que chegamos à raiz
-
-            valor = pai
-            peso_acumulado = distancias[pai - 1]
-
-            vertice = Vertice(valor, peso_acumulado)
-
-            pai = pais[valor - 1]
-            vertice.pai = pai
-
-            caminho_minimo.appendleft(vertice)
-
-        conjunto_dist_e_min.append((dist, caminho_minimo))
-
-    return conjunto_dist_e_min
+####################### QUESTÕES #########################################
 
 
 def questao1(num_grafo: int, caminho_main: str) -> None:
@@ -64,23 +22,13 @@ def questao1(num_grafo: int, caminho_main: str) -> None:
     # Caminho de outputs
     output_path = Path(caminho_main.parents[0], "outputs")
 
-    try:
-        mkdir(output_path)
-    except FileExistsError:
-        pass
-
-        n, arestas = ler_arquivo(
-            Path(caminho_main / f"grafo_W_{num_grafo}_1.txt"),
-            tem_pesos=True,
-        )
-
-        grafo = VetorAdj(n, arestas, tem_pesos=True)
+    grafo = ler_grafo(caminho_main, num_grafo=num_grafo)
 
     vertices_finais = [20, 30, 40, 50, 60]
     # Chamada da Função que 'executa o enunciado'
     dist_e_caminhos = distancia_e_caminho_minimo(grafo, vertices_finais)
 
-    with open(Path(output_path, f"graph_{num_grafo}_questao1.txt"), "a") as file:
+    with open(Path(output_path, f"graph_{num_grafo}_Q1.txt"), "a") as file:
 
         for i in range(len(vertices_finais)):
             file.write(f"Medindo do vértice 10 ao {vertices_finais[i]}: \n")
@@ -91,6 +39,71 @@ def questao1(num_grafo: int, caminho_main: str) -> None:
                 file.write(str(vertice) + "\n")
             file.write("\n")
             print(f"TERMINEI do 10 ao {vertices_finais[i]}, no grafo {num_grafo}...")
+
+
+def questao2(caminho_main: str):
+
+    output_path = Path(caminho_main.parents[0], "outputs")
+
+    for i in range(1, 2):
+
+        grafo = ler_grafo(caminho_main, num_grafo=i)
+
+        print(f"Grafo {i}")
+        tempos_vetor, tempos_heap = tempos_dijkstra(grafo, 5)
+
+        medio_vetor = sum(tempos_vetor) / len(tempos_vetor)
+        medio_heap = sum(tempos_heap) / len(tempos_heap)
+
+        with open(Path(output_path, f"graph_{i}_Q2.txt"), "a") as file:
+
+            file.write(f"TEMPOS: \n\n")
+
+            # Vetor
+            file.write(f"Tempos de Vetor: \n")
+            for item in tempos_vetor:
+                file.write(str(item) + ", ")
+            file.write(f"\n\nTempo Médio de Vetor: {medio_vetor}\n\n")
+
+            # Heap
+            file.write(f"Tempos de Heap: \n")
+            for item in tempos_heap:
+                file.write(str(item) + ", ")
+            file.write(f"\n\nTempo Médio de Heap: {medio_heap}\n")
+
+
+def questao3(caminho_main: str) -> None:
+
+    output_path = Path(caminho_main.parents[0], "outputs")
+    vertice_inicial = 1
+
+    for i in range(1, 2):
+
+        grafo = ler_grafo(caminho_main, num_grafo=i)
+
+        distancias, pais, S = mst(grafo, vertice_inicial)
+
+        arvore_minima = construir_caminho_min_mst(distancias, pais, S)
+
+        with open(Path(output_path, f"grafo_W_{i}_Q3.txt"), "a") as file:
+            file.write("Esta é a árvore geradora mínima encontrada no grafo: \n\n")
+            for vertice in arvore_minima:
+                file.write(vertice + "\n")
+            file.write("FINAL")
+
+
+############# Funções intermediárias de montagem ##############################
+def distancia_e_caminho_minimo(
+    grafo: VetorAdj, vertices_finais: List[int]
+) -> List[Tuple[int, Any]]:
+
+    vertice_inicial = 10
+
+    distancias, pais, S = dijkstra_com_vetor(grafo, vertice_inicial)
+
+    lista_dist_e_min = construir_caminho_min_dijkstra(distancias, pais, list(S))
+
+    return lista_dist_e_min
 
 
 def tempos_dijkstra(grafo: VetorAdj, k: int):
@@ -106,7 +119,7 @@ def tempos_dijkstra(grafo: VetorAdj, k: int):
     for index, s in enumerate(vertices_iniciais):
 
         # Somente para monitoramento em execução
-        # print(f"Estamos no índice {index}...")
+        print(f"Estamos no índice {index}...")
 
         # Tempos Vetor
         tempo_inicial_vetor = time()
@@ -129,39 +142,80 @@ def tempos_dijkstra(grafo: VetorAdj, k: int):
     return tempos_vetor, tempos_heap
 
 
-def questao2(caminho_main: str):
+##################### AUXILIARES ####################################################3
+
+
+def ler_grafo(caminho_main: str, num_grafo: int):
 
     output_path = Path(caminho_main.parents[0], "outputs")
 
-    for i in range(1, 6):
-        n, arestas = ler_arquivo(
-            Path(caminho_main / f"grafo_W_{i}_1.txt"),
-            tem_pesos=True,
-        )
+    try:
+        mkdir(output_path)
+    except FileExistsError:
+        pass
 
-        grafo = VetorAdj(n, arestas, tem_pesos=True)
+    n, arestas = ler_arquivo(
+        Path(caminho_main / f"grafo_W_{num_grafo}_1.txt"),
+        tem_pesos=True,
+    )
 
-        print(f"Grafo {i}")
-        tempos_vetor, tempos_heap = tempos_dijkstra(grafo, 5)
+    grafo = VetorAdj(n, arestas, tem_pesos=True)
 
-        medio_vetor = sum(tempos_vetor) / len(tempos_vetor)
-        medio_heap = sum(tempos_heap) / len(tempos_heap)
+    return grafo
 
-        with open(Path(output_path, f"graph_{i}_questao2.txt"), "a") as file:
 
-            file.write(f"TEMPOS: \n\n")
+def construir_caminho_min_dijkstra(
+    distancias: List[int], pais: List[int], vertices: Union[List[int], int]
+) -> List[Vertice]:
 
-            # Vetor
-            file.write(f"Tempos de Vetor: \n")
-            for item in tempos_vetor:
-                file.write(str(item) + ", ")
-            file.write(f"\n\nTempo Médio de Vetor: {medio_vetor}\n\n")
+    lista_caminhos_min = []
 
-            # Heap
-            file.write(f"Tempos de Heap: \n")
-            for item in tempos_heap:
-                file.write(str(item) + ", ")
-            file.write(f"\n\nTempo Médio de Heap: {medio_heap}\n")
+    for v in vertices:
+        # Distância
+        dist = distancias[v - 1]
+
+        # Reconstruindo caminho mínimo
+        caminho_minimo = deque()
+
+        #   construindo o vértice
+        v = Vertice(v, dist)
+        v.pai = pais[v.valor - 1]
+
+        caminho_minimo.append(v)
+
+        pai = v.pai
+
+        while pai != -1:  # Denota que chegamos à raiz
+
+            valor = pai
+            peso_acumulado = distancias[pai - 1]
+
+            vertice = Vertice(valor, peso_acumulado)
+
+            pai = pais[valor - 1]
+            vertice.pai = pai
+
+            caminho_minimo.appendleft(vertice)
+
+        lista_caminhos_min.append((dist, caminho_minimo))
+
+    return lista_caminhos_min
+
+
+def construir_caminho_min_mst(
+    distancias: List[int], pais: List[int], vertices: List[int]
+) -> List[Vertice]:
+
+    caminho_min = deque()
+
+    for i in range(len(vertices) - 1, 0, -1):
+
+        v = Vertice(vertices[i], distancias[i])
+        v.pai = pais[vertices[i]]
+
+        caminho_min.append(v)
+
+    return caminho_min
 
 
 ###############################################################################################################
