@@ -9,13 +9,12 @@ def __main__():
         getcwd(), "graph_env", "src", "estudos_de_caso", "grafos_parte2", "inputs"
     )
 
-    """ for num_grafo in range(1, 6):
+    """ for num_grafo in range(1, 2):
         questao1(num_grafo, Path(getcwd(), caminho_grafos)) """
 
     questao2(caminho_grafos)
 
-
-# questao3(caminho_grafos)
+    # questao3(caminho_grafos)
 
 
 __main__()

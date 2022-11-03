@@ -165,7 +165,7 @@ def ler_grafo(caminho_main: str, num_grafo: int):
 
 
 def construir_caminho_min_dijkstra(
-    distancias: List[int], pais: List[int], vertices: Union[List[int], int]
+    distancias: List[int], pais: List[int], vertices: List[int]
 ) -> List[Vertice]:
 
     lista_caminhos_min = []
@@ -208,10 +208,11 @@ def construir_caminho_min_mst(
 
     caminho_min = deque()
 
-    for i in range(len(vertices) - 1, 0, -1):
+    print(len(distancias))
+    for i in range(len(vertices), 0, -1):
 
-        v = Vertice(vertices[i], distancias[i])
-        v.pai = pais[vertices[i]]
+        v = Vertice(vertices[i - 1], distancias[i - 1])
+        v.pai = pais[vertices[i - 1]]
 
         caminho_min.append(v)
 
