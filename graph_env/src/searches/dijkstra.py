@@ -71,7 +71,7 @@ def dijkstra_com_heap(grafo: VetorAdj, vertice_s: int) -> List[Dict]:
 
     vertices = []
 
-    distancias = []
+    distancias = heapdict.heapdict()
     pais: List[int] = [np.int32(-1) for x in range(grafo.num_vertices)]
 
     # Populando a heap
@@ -79,21 +79,21 @@ def dijkstra_com_heap(grafo: VetorAdj, vertice_s: int) -> List[Dict]:
         distancias[np.int32(i)] = np.inf
 
     # Zerando a distância
-    distancias[vertice_s] = np.int32(0)
+    distancias[vertice_s] = np.float32(0)
 
     conjunto_v: List[int] = set([np.int32(x) for x in range(1, grafo.num_vertices + 1)])
     conjunto_s: Set[int] = set([])
 
     diferenca_de_conjuntos = conjunto_v - conjunto_s
 
-    while len(diferenca_de_conjuntos) != np.int32(0):
+    while len(diferenca_de_conjuntos) != 0:
 
         u, dist_u = distancias.popitem()
 
         # Adicionando ao conjunto de explorados (tanto conjunto_s, que contém só os valores)
         # como o vértice como um todo - em formato de dicionário - numa lista de vértices
         conjunto_s.add(u)
-        vertices.append({"valor": u, "pai": pais[u - 1], "dist": distancias[u - 1]})
+        vertices.append({"valor": u, "pai": pais[u - 1], "dist": dist_u})
 
         for vizinho in grafo.percorrer_vizinhos(u):
 
@@ -149,7 +149,7 @@ def mst(grafo: VetorAdj, vertice_s: int) -> Tuple[List[int], List[int], List[Ver
 # TESTES
 
 # 1) Dijkstra com vetor de pesos
-n, arestas = ler_arquivo(
+""" n, arestas = ler_arquivo(
     "graph_env/src/searches/graph_teste_pesos_sem_negativo.txt", tem_pesos=True
 )
 grafo_em_vetor = VetorAdj(n, arestas, tem_pesos=True)
@@ -158,7 +158,7 @@ vertices = dijkstra_com_vetor(grafo_em_vetor, 1)
 
 for item in vertices:
     vertice = Vertice(item["valor"], item["pai"], peso=item["dist"])
-    print(vertice)
+    print(vertice) """
 
 
 # 2) Dijkstra com heap
@@ -167,11 +167,8 @@ for item in vertices:
 )
 grafo_em_vetor = VetorAdj(n, arestas, tem_pesos=True)
 
-dijkstra_com_heap(grafo_em_vetor, 1)
+vertices = dijkstra_com_heap(grafo_em_vetor, 1)
 
-distancias, pais, s = dijkstra_com_vetor(grafo_em_vetor, 1)
-
-for item in s:
-    vertice = Vertice(item, distancias[item - 1])
-    vertice.pai = pais[item - 1]
+for item in vertices:
+    vertice = Vertice(item["valor"], item["pai"], peso=item["dist"])
     print(vertice) """
