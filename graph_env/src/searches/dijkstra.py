@@ -13,7 +13,7 @@ def dijkstra_com_vetor(
     grafo: VetorAdj, vertice_s: int
 ) -> Tuple[List[int], List[Vertice]]:
 
-    vertices = []
+    vertices = [{}] * grafo.num_vertices
     distancias: List[Union[np.inf, np.int32]] = [
         np.float32(np.inf) for x in range(grafo.num_vertices)
     ]
@@ -42,13 +42,11 @@ def dijkstra_com_vetor(
 
         # Adicionando ao conjunto e à lista de vértices
         conjunto_s.add(u)
-        vertices.append(
-            {
-                "valor": np.int32(u),
-                "pai": np.int32(pais[u - 1]),
-                "dist": np.float32(distancias[u - 1]),
-            }
-        )
+        vertices[u - 1] = {
+            "valor": u,
+            "pai": pais[u - 1],
+            "dist": distancias[u - 1],
+        }
 
         for vizinho in grafo.percorrer_vizinhos(u):
 
@@ -69,7 +67,7 @@ def dijkstra_com_vetor(
 
 def dijkstra_com_heap(grafo: VetorAdj, vertice_s: int) -> List[Dict]:
 
-    vertices = []
+    vertices = [{}] * grafo.num_vertices
 
     distancias = heapdict.heapdict()
     pais: List[int] = [np.int32(-1) for x in range(grafo.num_vertices)]
@@ -93,7 +91,7 @@ def dijkstra_com_heap(grafo: VetorAdj, vertice_s: int) -> List[Dict]:
         # Adicionando ao conjunto de explorados (tanto conjunto_s, que contém só os valores)
         # como o vértice como um todo - em formato de dicionário - numa lista de vértices
         conjunto_s.add(u)
-        vertices.append({"valor": u, "pai": pais[u - 1], "dist": dist_u})
+        vertices[u - 1] = {"valor": u, "pai": pais[u - 1], "dist": dist_u}
 
         for vizinho in grafo.percorrer_vizinhos(u):
 

@@ -2,7 +2,7 @@ import sys
 
 sys.path.insert(1, "C:/Users/gabri/Desktop/graph_library/graph_env/src")
 
-from typing import List, Tuple, Any, Set, Union
+from typing import Dict, List, Tuple, Any, Set, Union
 from data_structures.search_vertex import Vertice
 from data_structures.adjacency_vector import VetorAdj
 from searches.dijkstra import dijkstra_com_heap, dijkstra_com_vetor, mst
@@ -83,7 +83,7 @@ def questao3(caminho_main: str) -> None:
 
         distancias, pais, S = mst(grafo, vertice_inicial)
 
-        arvore_minima = construir_caminho_min_mst(distancias, pais, S)
+        arvore_minima = construir_caminho_min(distancias, pais, S)
 
         with open(Path(output_path, f"grafo_W_{i}_Q3.txt"), "a") as file:
             file.write("Esta é a árvore geradora mínima encontrada no grafo: \n\n")
@@ -98,10 +98,10 @@ def distancia_e_caminho_minimo(
 ) -> List[Tuple[int, Any]]:
 
     vertice_inicial = 10
+    vertices = dijkstra_com_vetor(grafo, vertice_inicial)
 
-    distancias, pais, S = dijkstra_com_vetor(grafo, vertice_inicial)
-
-    lista_dist_e_min = construir_caminho_min_dijkstra(distancias, pais, list(S))
+    for fim in vertices_finais:
+        lista_dist_e_min = construir_caminho_min(vertices, fim)
 
     return lista_dist_e_min
 
@@ -164,57 +164,25 @@ def ler_grafo(caminho_main: str, num_grafo: int):
     return grafo
 
 
-def construir_caminho_min_dijkstra(
-    distancias: List[int], pais: List[int], vertices: List[int]
-) -> List[Vertice]:
-
-    lista_caminhos_min = []
-
-    for v in vertices:
-        # Distância
-        dist = distancias[v - 1]
-
-        # Reconstruindo caminho mínimo
-        caminho_minimo = deque()
-
-        #   construindo o vértice
-        v = Vertice(v, dist)
-        v.pai = pais[v.valor - 1]
-
-        caminho_minimo.append(v)
-
-        pai = v.pai
-
-        while pai != -1:  # Denota que chegamos à raiz
-
-            valor = pai
-            peso_acumulado = distancias[pai - 1]
-
-            vertice = Vertice(valor, peso_acumulado)
-
-            pai = pais[valor - 1]
-            vertice.pai = pai
-
-            caminho_minimo.appendleft(vertice)
-
-        lista_caminhos_min.append((dist, caminho_minimo))
-
-    return lista_caminhos_min
-
-
-def construir_caminho_min_mst(
-    distancias: List[int], pais: List[int], vertices: List[int]
-) -> List[Vertice]:
+def construir_caminho_min(vertices: List[Dict], fim: int) -> List[Vertice]:
 
     caminho_min = deque()
+    v = vertices[fim - 1]
+    prox = v["pai"]
 
-    print(len(distancias))
-    for i in range(len(vertices), 0, -1):
+    while prox != -1:
 
-        v = Vertice(vertices[i - 1], distancias[i - 1])
-        v.pai = pais[vertices[i - 1]]
+        v = vertices[prox - 1]
+        # Criação de objeto padrão da lib
+        # (nem precisava, mas pra alguma coisa ter padrão, pelo menos...)
+        vertice_modelo = Vertice(
+            v["valor"],
+            v["pai"],
+            peso=v["dist"],
+        )
+        caminho_min.append(vertice_modelo)
 
-        caminho_min.append(v)
+        prox = v["pai"]
 
     return caminho_min
 
