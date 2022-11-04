@@ -2,7 +2,7 @@ import sys
 
 sys.path.insert(1, "C:/Users/gabri/Desktop/graph_library/graph_env/src")
 import numpy as np
-from typing import List, Set, Tuple, Union
+from typing import Dict, List, Set, Tuple, Union
 from data_structures.adjacency_vector import VetorAdj
 from data_structures.search_vertex import Vertice
 from file_utils.file_handlers import ler_arquivo
@@ -13,6 +13,7 @@ def dijkstra_com_vetor(
     grafo: VetorAdj, vertice_s: int
 ) -> Tuple[List[int], List[Vertice]]:
 
+    vertices = []
     distancias: List[Union[np.inf, np.int32]] = [
         np.float32(np.inf) for x in range(grafo.num_vertices)
     ]
@@ -38,8 +39,16 @@ def dijkstra_com_vetor(
 
         u = np.int32(diferenca_conjuntos_lista[indice_do_menor])
         dist_u = np.float32(distancias[u - 1])
-        # Fim do else
+
+        # Adicionando ao conjunto e à lista de vértices
         conjunto_s.add(u)
+        vertices.append(
+            {
+                "valor": np.int32(u),
+                "pai": np.int32(pais[u - 1]),
+                "dist": np.float32(distancias[u - 1]),
+            }
+        )
 
         for vizinho in grafo.percorrer_vizinhos(u):
 
@@ -55,25 +64,21 @@ def dijkstra_com_vetor(
 
         diferenca_de_conjuntos = conjunto_v - conjunto_s
 
-    return (distancias, pais, np.array(list(conjunto_s), dtype=np.int32))
+    return vertices
 
 
-def dijkstra_com_heap(
-    grafo: VetorAdj, vertice_s: int
-) -> Tuple[List[int], List[int], List[Vertice]]:
+def dijkstra_com_heap(grafo: VetorAdj, vertice_s: int) -> List[Dict]:
 
-    # Dicionário que tem formato dict[valor] = prioridade; junto a métodos de heap e suporte à atualização de chaves
-    distancias = heapdict.heapdict()
+    vertices = []
+
+    distancias = []
     pais: List[int] = [np.int32(-1) for x in range(grafo.num_vertices)]
 
-    # Populando a heap #### consertar formatador do VSCODE pq tá triste isso"
+    # Populando a heap
     for i in range(1, grafo.num_vertices + 1):
-        distancias[
-            np.int32(i)
-        ] = (
-            np.inf
-        )  # Inserção: seria de O(log n), mas nesse caso acho que depende do tamanho de alocação tabela
+        distancias[np.int32(i)] = np.inf
 
+    # Zerando a distância
     distancias[vertice_s] = np.int32(0)
 
     conjunto_v: List[int] = set([np.int32(x) for x in range(1, grafo.num_vertices + 1)])
@@ -84,7 +89,11 @@ def dijkstra_com_heap(
     while len(diferenca_de_conjuntos) != np.int32(0):
 
         u, dist_u = distancias.popitem()
+
+        # Adicionando ao conjunto de explorados (tanto conjunto_s, que contém só os valores)
+        # como o vértice como um todo - em formato de dicionário - numa lista de vértices
         conjunto_s.add(u)
+        vertices.append({"valor": u, "pai": pais[u - 1], "dist": distancias[u - 1]})
 
         for vizinho in grafo.percorrer_vizinhos(u):
 
@@ -100,7 +109,7 @@ def dijkstra_com_heap(
 
         diferenca_de_conjuntos = conjunto_v - conjunto_s
 
-    return (distancias, pais, np.array(list(conjunto_s), dtype=np.int32))
+    return vertices
 
 
 def mst(grafo: VetorAdj, vertice_s: int) -> Tuple[List[int], List[int], List[Vertice]]:
@@ -140,17 +149,16 @@ def mst(grafo: VetorAdj, vertice_s: int) -> Tuple[List[int], List[int], List[Ver
 # TESTES
 
 # 1) Dijkstra com vetor de pesos
-""" n, arestas = ler_arquivo(
+n, arestas = ler_arquivo(
     "graph_env/src/searches/graph_teste_pesos_sem_negativo.txt", tem_pesos=True
 )
 grafo_em_vetor = VetorAdj(n, arestas, tem_pesos=True)
 
-distancias, pais, s = dijkstra_com_vetor(grafo_em_vetor, 1)
+vertices = dijkstra_com_vetor(grafo_em_vetor, 1)
 
-for item in s:
-    vertice = Vertice(item, distancias[item - 1])
-    vertice.pai = pais[item - 1]
-    print(vertice) """
+for item in vertices:
+    vertice = Vertice(item["valor"], item["pai"], peso=item["dist"])
+    print(vertice)
 
 
 # 2) Dijkstra com heap

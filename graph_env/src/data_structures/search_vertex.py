@@ -6,10 +6,15 @@ class Vertice:
     # Temos um parâmetro que vai ocupar memória desnecessária, mas ganhamos na simplificação das chamadas
     # e na reutilização
 
-    def __init__(self, valor: int, peso: float = 0.0) -> None:
+    def __init__(
+        self,
+        valor: int,
+        pai: int,
+        peso: float = 0.0,
+    ) -> None:
         self.valor: int = valor
         self.marcador: bool = False
-        self.pai: Union[int, None] = None
+        self.pai: Union[int, None] = pai if pai else None
         self.nivel: int = 0
         self.peso = peso
 
