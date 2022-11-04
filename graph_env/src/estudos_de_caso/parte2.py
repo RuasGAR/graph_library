@@ -5,40 +5,46 @@ sys.path.insert(1, "C:/Users/gabri/Desktop/graph_library/graph_env/src")
 from typing import Dict, List, Tuple, Any, Set, Union
 from data_structures.search_vertex import Vertice
 from data_structures.adjacency_vector import VetorAdj
-from searches.dijkstra import dijkstra_com_heap, dijkstra_com_vetor, mst
+from searches.dijkstra import dijkstra_com_heap, dijkstra_com_vetor
 from file_utils.file_handlers import ler_arquivo
 from collections import deque
 from pathlib import Path
 from os import mkdir
 from numpy import random
 from time import time
+import numpy as np
 
 ####################### QUESTÕES #########################################
 
 
-def questao1(num_grafo: int, caminho_main: str) -> None:
+def questao1(caminho_main: str) -> None:
 
-    print(f"Grafo {num_grafo}")
     # Caminho de outputs
     output_path = Path(caminho_main.parents[0], "outputs")
-
-    grafo = ler_grafo(caminho_main, num_grafo=num_grafo)
-
     vertices_finais = [20, 30, 40, 50, 60]
-    # Chamada da Função que 'executa o enunciado'
-    dist_e_caminhos = distancia_e_caminho_minimo(grafo, vertices_finais)
 
-    with open(Path(output_path, f"graph_{num_grafo}_Q1.txt"), "a") as file:
+    for num_grafo in range(1, 2):
+        grafo = ler_grafo(caminho_main, num_grafo=num_grafo)
+        # Chamada da Função que 'executa o enunciado'
+        dist_e_caminhos = distancia_e_caminho_minimo(grafo, vertices_finais)
 
-        for i in range(len(vertices_finais)):
-            file.write(f"Medindo do vértice 10 ao {vertices_finais[i]}: \n")
-            file.write(f"Distância: " + "{0:.2f}".format(dist_e_caminhos[i][0]) + "\n")
-            file.write("Caminho Mínimo: \n")
-            print(f"Montando caminho mínimo...")
-            for vertice in dist_e_caminhos[i][1]:
-                file.write(str(vertice) + "\n")
-            file.write("\n")
-            print(f"TERMINEI do 10 ao {vertices_finais[i]}, no grafo {num_grafo}...")
+        print(f"Grafo {num_grafo}")
+
+        with open(Path(output_path, f"graph_{num_grafo}_Q1.txt"), "a") as file:
+
+            for i in range(len(vertices_finais)):
+                file.write(f"Medindo do vértice 10 ao {vertices_finais[i]}: \n")
+                file.write(
+                    f"Distância: " + "{0:.2f}".format(dist_e_caminhos[i][0]) + "\n"
+                )
+                file.write("Caminho Mínimo: \n")
+                print(f"Montando caminho mínimo...")
+                for vertice in dist_e_caminhos[i][1]:
+                    file.write(str(vertice) + "\n")
+                file.write("\n")
+                print(
+                    f"TERMINEI do 10 ao {vertices_finais[i]}, no grafo {num_grafo}..."
+                )
 
 
 def questao2(caminho_main: str):
@@ -97,13 +103,17 @@ def distancia_e_caminho_minimo(
     grafo: VetorAdj, vertices_finais: List[int]
 ) -> List[Tuple[int, Any]]:
 
-    vertice_inicial = 10
-    vertices = dijkstra_com_vetor(grafo, vertice_inicial)
+    vertice_inicial = np.int32(10)
+    vertices = dijkstra_com_heap(grafo, vertice_inicial)
+
+    todas_distancias_cam_min = []
 
     for fim in vertices_finais:
-        lista_dist_e_min = construir_caminho_min(vertices, fim)
+        caminho_min = construir_caminho_min(vertices, fim)
+        dist = caminho_min[-1].peso
+        todas_distancias_cam_min.append((dist, caminho_min))
 
-    return lista_dist_e_min
+    return todas_distancias_cam_min
 
 
 def tempos_dijkstra(grafo: VetorAdj, k: int):
@@ -171,7 +181,7 @@ def construir_caminho_min(vertices: List[Dict], fim: int) -> List[Vertice]:
     prox = v["pai"]
 
     while prox != -1:
-
+        print(v)
         v = vertices[prox - 1]
         # Criação de objeto padrão da lib
         # (nem precisava, mas pra alguma coisa ter padrão, pelo menos...)
@@ -180,7 +190,7 @@ def construir_caminho_min(vertices: List[Dict], fim: int) -> List[Vertice]:
             v["pai"],
             peso=v["dist"],
         )
-        caminho_min.append(vertice_modelo)
+        caminho_min.appendleft(vertice_modelo)
 
         prox = v["pai"]
 

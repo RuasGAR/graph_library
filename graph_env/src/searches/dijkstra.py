@@ -9,9 +9,7 @@ from file_utils.file_handlers import ler_arquivo
 import heapdict
 
 
-def dijkstra_com_vetor(
-    grafo: VetorAdj, vertice_s: int
-) -> Tuple[List[int], List[Vertice]]:
+def dijkstra_com_vetor(grafo: VetorAdj, vertice_s: int) -> List[Dict]:
 
     vertices = [{}] * grafo.num_vertices
     distancias: List[Union[np.inf, np.int32]] = [
@@ -26,18 +24,19 @@ def dijkstra_com_vetor(
 
     diferenca_de_conjuntos = conjunto_v - conjunto_s
 
-    while len(diferenca_de_conjuntos) != 0:
+    while len(diferenca_de_conjuntos) > 0:
 
         diferenca_conjuntos_lista = np.array(
             list(diferenca_de_conjuntos), dtype=np.int32
         )
 
-        try:
-            indice_do_menor = np.argmin(diferenca_conjuntos_lista)
-        except ValueError:
-            indice_do_menor = 0
+        # problema aqui
+        # a menor distancia dentro dos limites da diferenca de conjunto
+        dist_na_diferenca = [distancias[x - 1] for x in diferenca_conjuntos_lista]
+        indice_do_menor = np.argmin(dist_na_diferenca)
 
         u = np.int32(diferenca_conjuntos_lista[indice_do_menor])
+        print(u)
         dist_u = np.float32(distancias[u - 1])
 
         # Adicionando ao conjunto e à lista de vértices
@@ -45,7 +44,7 @@ def dijkstra_com_vetor(
         vertices[u - 1] = {
             "valor": u,
             "pai": pais[u - 1],
-            "dist": distancias[u - 1],
+            "dist": dist_u,
         }
 
         for vizinho in grafo.percorrer_vizinhos(u):
@@ -99,7 +98,10 @@ def dijkstra_com_heap(grafo: VetorAdj, vertice_s: int) -> List[Dict]:
             peso_u_vizinho = vizinho[1]
 
             try:
-                if distancias[valor_vizinho] > dist_u + peso_u_vizinho:
+                if (
+                    valor_vizinho not in conjunto_s
+                    and distancias[valor_vizinho] > dist_u + peso_u_vizinho
+                ):
                     distancias[valor_vizinho] = np.float32(dist_u + peso_u_vizinho)
                     pais[valor_vizinho - 1] = u
             except KeyError:
@@ -108,39 +110,6 @@ def dijkstra_com_heap(grafo: VetorAdj, vertice_s: int) -> List[Dict]:
         diferenca_de_conjuntos = conjunto_v - conjunto_s
 
     return vertices
-
-
-def mst(grafo: VetorAdj, vertice_s: int) -> Tuple[List[int], List[int], List[Vertice]]:
-
-    distancias: List[Union[np.inf, np.int32]] = [
-        np.float32(np.inf) for x in range(grafo.num_vertices)
-    ]
-    pais: List[int] = [np.int32(-1) for x in range(grafo.num_vertices)]
-
-    distancias[vertice_s - 1] = np.int32(0)
-
-    conjunto_v: List[int] = set([np.int32(x) for x in range(1, grafo.num_vertices + 1)])
-    conjunto_s: Set[int] = set([])
-
-    diferenca_de_conjuntos = conjunto_v - conjunto_s
-
-    while len(diferenca_de_conjuntos) != np.int32(0):
-
-        diferenca_de_conjuntos = conjunto_v - conjunto_s
-
-        for vizinho in grafo.percorrer_vizinhos(u):
-
-            # Lembrando que um vizinho de u está armazenado numa tupla "(valor, peso_de_u_até_v)"
-            valor_vizinho = vizinho[0]
-            peso_u_vizinho = vizinho[1]
-
-            indice_vizinho = valor_vizinho - 1
-
-            if distancias[indice_vizinho] > dist_u + peso_u_vizinho:
-                distancias[indice_vizinho] = dist_u + peso_u_vizinho
-                pais[indice_vizinho] = u
-
-    return (distancias, pais, np.array(list(conjunto_s), dtype=np.int32))
 
 
 ###############################################################################################################
