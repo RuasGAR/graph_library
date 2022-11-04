@@ -22,7 +22,7 @@ def dijkstra_com_vetor(grafo: VetorAdj, vertice_s: int) -> List[Dict]:
 
     distancias[vertice_s - 1] = np.float32(0)
 
-    diferenca_de_conjuntos = conjunto_v - conjunto_s
+    diferenca_de_conjuntos = set.difference(conjunto_v, conjunto_s)
 
     while len(diferenca_de_conjuntos) > 0:
 
@@ -30,13 +30,11 @@ def dijkstra_com_vetor(grafo: VetorAdj, vertice_s: int) -> List[Dict]:
             list(diferenca_de_conjuntos), dtype=np.int32
         )
 
-        # problema aqui
-        # a menor distancia dentro dos limites da diferenca de conjunto
+        # Colhendo as distâncias elegíveis
         dist_na_diferenca = [distancias[x - 1] for x in diferenca_conjuntos_lista]
         indice_do_menor = np.argmin(dist_na_diferenca)
 
         u = np.int32(diferenca_conjuntos_lista[indice_do_menor])
-        print(u)
         dist_u = np.float32(distancias[u - 1])
 
         # Adicionando ao conjunto e à lista de vértices
@@ -59,7 +57,7 @@ def dijkstra_com_vetor(grafo: VetorAdj, vertice_s: int) -> List[Dict]:
                 distancias[indice_vizinho] = dist_u + peso_u_vizinho
                 pais[indice_vizinho] = u
 
-        diferenca_de_conjuntos = conjunto_v - conjunto_s
+        diferenca_de_conjuntos = set.difference(conjunto_v, conjunto_s)
 
     return vertices
 
@@ -81,7 +79,7 @@ def dijkstra_com_heap(grafo: VetorAdj, vertice_s: int) -> List[Dict]:
     conjunto_v: List[int] = set([np.int32(x) for x in range(1, grafo.num_vertices + 1)])
     conjunto_s: Set[int] = set([])
 
-    diferenca_de_conjuntos = conjunto_v - conjunto_s
+    diferenca_de_conjuntos = set.difference(conjunto_v, conjunto_s)
 
     while len(diferenca_de_conjuntos) != 0:
 
@@ -98,16 +96,13 @@ def dijkstra_com_heap(grafo: VetorAdj, vertice_s: int) -> List[Dict]:
             peso_u_vizinho = vizinho[1]
 
             try:
-                if (
-                    valor_vizinho not in conjunto_s
-                    and distancias[valor_vizinho] > dist_u + peso_u_vizinho
-                ):
+                if distancias[valor_vizinho] > dist_u + peso_u_vizinho:
                     distancias[valor_vizinho] = np.float32(dist_u + peso_u_vizinho)
                     pais[valor_vizinho - 1] = u
             except KeyError:
                 continue
 
-        diferenca_de_conjuntos = conjunto_v - conjunto_s
+        diferenca_de_conjuntos = set.difference(conjunto_v, conjunto_s)
 
     return vertices
 

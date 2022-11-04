@@ -104,7 +104,7 @@ def distancia_e_caminho_minimo(
 ) -> List[Tuple[int, Any]]:
 
     vertice_inicial = np.int32(10)
-    vertices = dijkstra_com_heap(grafo, vertice_inicial)
+    vertices = dijkstra_com_vetor(grafo, vertice_inicial)
 
     todas_distancias_cam_min = []
 
@@ -179,9 +179,9 @@ def construir_caminho_min(vertices: List[Dict], fim: int) -> List[Vertice]:
     caminho_min = deque()
     v = vertices[fim - 1]
     prox = v["pai"]
+    caminho_min.append(Vertice(v["valor"], v["pai"], peso=v["dist"]))
 
     while prox != -1:
-        print(v)
         v = vertices[prox - 1]
         # Criação de objeto padrão da lib
         # (nem precisava, mas pra alguma coisa ter padrão, pelo menos...)

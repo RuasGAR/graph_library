@@ -1,0 +1,59 @@
+Medindo do vértice 10 ao 20: 
+Distância: 1.52
+Caminho Mínimo: 
+Nó 10: ------> Pai: Sou Raiz; Peso: 0.00
+Nó 28: ------> Pai: 10; Peso: 0.00
+Nó 621: ------> Pai: 28; Peso: 0.16
+Nó 27: ------> Pai: 621; Peso: 0.78
+Nó 20: ------> Pai: 27; Peso: 1.52
+
+Medindo do vértice 10 ao 30: 
+Distância: 1.48
+Caminho Mínimo: 
+Nó 10: ------> Pai: Sou Raiz; Peso: 0.00
+Nó 28: ------> Pai: 10; Peso: 0.00
+Nó 621: ------> Pai: 28; Peso: 0.16
+Nó 200: ------> Pai: 621; Peso: 0.30
+Nó 32: ------> Pai: 200; Peso: 0.50
+Nó 959: ------> Pai: 32; Peso: 0.61
+Nó 859: ------> Pai: 959; Peso: 0.94
+Nó 738: ------> Pai: 859; Peso: 1.31
+Nó 30: ------> Pai: 738; Peso: 1.48
+
+Medindo do vértice 10 ao 40: 
+Distância: 1.52
+Caminho Mínimo: 
+Nó 10: ------> Pai: Sou Raiz; Peso: 0.00
+Nó 28: ------> Pai: 10; Peso: 0.00
+Nó 621: ------> Pai: 28; Peso: 0.16
+Nó 116: ------> Pai: 621; Peso: 0.62
+Nó 51: ------> Pai: 116; Peso: 0.85
+Nó 40: ------> Pai: 51; Peso: 1.52
+
+Medindo do vértice 10 ao 50: 
+Distância: 1.39
+Caminho Mínimo: 
+Nó 10: ------> Pai: Sou Raiz; Peso: 0.00
+Nó 28: ------> Pai: 10; Peso: 0.00
+Nó 203: ------> Pai: 28; Peso: 0.25
+Nó 666: ------> Pai: 203; Peso: 0.43
+Nó 937: ------> Pai: 666; Peso: 0.60
+Nó 113: ------> Pai: 937; Peso: 0.85
+Nó 64: ------> Pai: 113; Peso: 1.02
+Nó 422: ------> Pai: 64; Peso: 1.04
+Nó 296: ------> Pai: 422; Peso: 1.05
+Nó 50: ------> Pai: 296; Peso: 1.39
+
+Medindo do vértice 10 ao 60: 
+Distância: 1.39
+Caminho Mínimo: 
+Nó 10: ------> Pai: Sou Raiz; Peso: 0.00
+Nó 597: ------> Pai: 10; Peso: 0.08
+Nó 172: ------> Pai: 597; Peso: 0.10
+Nó 311: ------> Pai: 172; Peso: 0.49
+Nó 123: ------> Pai: 311; Peso: 0.63
+Nó 89: ------> Pai: 123; Peso: 0.83
+Nó 963: ------> Pai: 89; Peso: 1.12
+Nó 215: ------> Pai: 963; Peso: 1.18
+Nó 60: ------> Pai: 215; Peso: 1.39
+
