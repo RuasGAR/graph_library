@@ -21,10 +21,12 @@ class Vertice:
     def __repr__(self) -> str:
 
         if self.pai == None or self.pai == -1:
-            self.pai = "Sou Raiz"
+            repr_pai = "Raiz"
+        else:
+            repr_pai = self.pai
 
         # Segunda Parte
-        return f"Nó {self.valor}: ------> Pai: {self.pai}; Peso: " + "{0:.2f}".format(
+        return f"Nó {self.valor}: ------> Pai: {repr_pai}; Peso: " + "{0:.2f}".format(
             self.peso
         )
 

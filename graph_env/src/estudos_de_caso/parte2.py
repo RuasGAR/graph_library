@@ -178,21 +178,13 @@ def construir_caminho_min(vertices: List[Dict], fim: int) -> List[Vertice]:
 
     caminho_min = deque()
     v = vertices[fim - 1]
-    prox = v["pai"]
-    caminho_min.append(Vertice(v["valor"], v["pai"], peso=v["dist"]))
+    prox = v.pai
+    caminho_min.append(v)
 
     while prox != -1:
-        v = vertices[prox - 1]
-        # Criação de objeto padrão da lib
-        # (nem precisava, mas pra alguma coisa ter padrão, pelo menos...)
-        vertice_modelo = Vertice(
-            v["valor"],
-            v["pai"],
-            peso=v["dist"],
-        )
-        caminho_min.appendleft(vertice_modelo)
-
-        prox = v["pai"]
+        prox_v = vertices[prox - 1]
+        caminho_min.appendleft(prox_v)
+        prox = prox_v.pai
 
     return caminho_min
 

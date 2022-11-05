@@ -11,53 +11,42 @@ import heapdict
 
 def dijkstra_com_vetor(grafo: VetorAdj, vertice_s: int) -> List[Dict]:
 
-    vertices = [{}] * grafo.num_vertices
-    distancias: List[Union[np.inf, np.int32]] = [
-        np.float32(np.inf) for x in range(grafo.num_vertices)
+    # Criação de vertices de todos os vértices, da fila de descobertos
+    vertices: List[Dict] = [
+        Vertice(x, -1, np.inf) for x in range(1, grafo.num_vertices + 1)
     ]
-    pais: List[int] = [np.int32(-1) for x in range(grafo.num_vertices)]
 
-    conjunto_v: List[int] = set([np.int32(x) for x in range(1, grafo.num_vertices + 1)])
-    conjunto_s: Set[int] = set([])
+    # vai funcionar como se fosse uma fila, constantemente reordenada
 
-    distancias[vertice_s - 1] = np.float32(0)
+    descobertos: List[Dict] = []
 
-    diferenca_de_conjuntos = set.difference(conjunto_v, conjunto_s)
+    # Setando distância do inicial e colocando-o entre os descobertos
+    vertices[vertice_s - 1].peso = 0
+    descobertos.append(vertices[vertice_s - 1])
 
-    while len(diferenca_de_conjuntos) > 0:
+    while len(descobertos) > 0:
 
-        diferenca_conjuntos_lista = np.array(
-            list(diferenca_de_conjuntos), dtype=np.int32
-        )
+        descobertos = sorted(descobertos, key=lambda x: x.peso)  # 0(n)
 
-        # Colhendo as distâncias elegíveis
-        dist_na_diferenca = [distancias[x - 1] for x in diferenca_conjuntos_lista]
-        indice_do_menor = np.argmin(dist_na_diferenca)
+        # é o item com menor distância, já que há ordenação por este parâmetro
+        u = descobertos.pop(0)
+        u.marcador = True
+        dist_u = u.peso
 
-        u = np.int32(diferenca_conjuntos_lista[indice_do_menor])
-        dist_u = np.float32(distancias[u - 1])
-
-        # Adicionando ao conjunto e à lista de vértices
-        conjunto_s.add(u)
-        vertices[u - 1] = {
-            "valor": u,
-            "pai": pais[u - 1],
-            "dist": dist_u,
-        }
-
-        for vizinho in grafo.percorrer_vizinhos(u):
+        for vizinho in grafo.percorrer_vizinhos(u.valor):
 
             # Lembrando que um vizinho de u está armazenado numa tupla "(valor, peso_de_u_até_v)"
             valor_vizinho = vizinho[0]
             peso_u_vizinho = vizinho[1]
-
             indice_vizinho = valor_vizinho - 1
 
-            if distancias[indice_vizinho] > dist_u + peso_u_vizinho:
-                distancias[indice_vizinho] = dist_u + peso_u_vizinho
-                pais[indice_vizinho] = u
+            if vertices[indice_vizinho].marcador == True:
+                continue
 
-        diferenca_de_conjuntos = set.difference(conjunto_v, conjunto_s)
+            if vertices[indice_vizinho].peso > dist_u + peso_u_vizinho:
+                vertices[indice_vizinho].peso = dist_u + peso_u_vizinho
+                vertices[indice_vizinho].pai = u.valor
+                descobertos.append(vertices[indice_vizinho])
 
     return vertices
 
@@ -76,10 +65,10 @@ def dijkstra_com_heap(grafo: VetorAdj, vertice_s: int) -> List[Dict]:
     # Zerando a distância
     distancias[vertice_s] = np.float32(0)
 
-    conjunto_v: List[int] = set([np.int32(x) for x in range(1, grafo.num_vertices + 1)])
+    conjunto_v: Set[int] = set([np.int32(x) for x in range(1, grafo.num_vertices + 1)])
     conjunto_s: Set[int] = set([])
 
-    diferenca_de_conjuntos = set.difference(conjunto_v, conjunto_s)
+    diferenca_de_conjuntos = conjunto_v - conjunto_s
 
     while len(diferenca_de_conjuntos) != 0:
 
@@ -98,11 +87,11 @@ def dijkstra_com_heap(grafo: VetorAdj, vertice_s: int) -> List[Dict]:
             try:
                 if distancias[valor_vizinho] > dist_u + peso_u_vizinho:
                     distancias[valor_vizinho] = np.float32(dist_u + peso_u_vizinho)
-                    pais[valor_vizinho - 1] = u
+                    pais[valor_vizinho - 1] = u["valor"]
             except KeyError:
                 continue
 
-        diferenca_de_conjuntos = set.difference(conjunto_v, conjunto_s)
+        diferenca_de_conjuntos = conjunto_v - conjunto_s
 
     return vertices
 
@@ -119,8 +108,7 @@ grafo_em_vetor = VetorAdj(n, arestas, tem_pesos=True)
 vertices = dijkstra_com_vetor(grafo_em_vetor, 1)
 
 for item in vertices:
-    vertice = Vertice(item["valor"], item["pai"], peso=item["dist"])
-    print(vertice) """
+    print(item) """
 
 
 # 2) Dijkstra com heap
