@@ -23,7 +23,7 @@ def questao1(caminho_main: str) -> None:
     output_path = Path(caminho_main.parents[0], "outputs")
     vertices_finais = [20, 30, 40, 50, 60]
 
-    for num_grafo in range(1, 2):
+    for num_grafo in range(1, 6):
         grafo = ler_grafo(caminho_main, num_grafo=num_grafo)
         # Chamada da Função que 'executa o enunciado'
         dist_e_caminhos = distancia_e_caminho_minimo(grafo, vertices_finais)
@@ -104,12 +104,12 @@ def distancia_e_caminho_minimo(
 ) -> List[Tuple[int, Any]]:
 
     vertice_inicial = np.int32(10)
-    vertices = dijkstra_com_vetor(grafo, vertice_inicial)
+    vertices = dijkstra_com_heap(grafo, vertice_inicial)
 
     todas_distancias_cam_min = []
 
     for fim in vertices_finais:
-        caminho_min = construir_caminho_min(vertices, fim)
+        caminho_min = construir_caminho_min(vertices, "heap", fim)
         dist = caminho_min[-1].peso
         todas_distancias_cam_min.append((dist, caminho_min))
 
@@ -174,7 +174,10 @@ def ler_grafo(caminho_main: str, num_grafo: int):
     return grafo
 
 
-def construir_caminho_min(vertices: List[Dict], fim: int) -> List[Vertice]:
+def construir_caminho_min(vertices: List[Dict], tipo: str, fim: int) -> List[Vertice]:
+
+    if tipo == "heap":
+        vertices = sorted(vertices, key=lambda x: x.valor)
 
     caminho_min = deque()
     v = vertices[fim - 1]
