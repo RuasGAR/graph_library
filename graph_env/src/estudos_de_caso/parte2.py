@@ -109,7 +109,7 @@ def distancia_e_caminho_minimo(
     todas_distancias_cam_min = []
 
     for fim in vertices_finais:
-        caminho_min = construir_caminho_min(vertices, "heap", fim)
+        caminho_min = construir_caminho_min(vertices, fim)
         dist = caminho_min[-1].peso
         todas_distancias_cam_min.append((dist, caminho_min))
 
@@ -174,10 +174,7 @@ def ler_grafo(caminho_main: str, num_grafo: int):
     return grafo
 
 
-def construir_caminho_min(vertices: List[Dict], tipo: str, fim: int) -> List[Vertice]:
-
-    if tipo == "heap":
-        vertices = sorted(vertices, key=lambda x: x.valor)
+def construir_caminho_min(vertices: List[Dict], fim: int) -> List[Vertice]:
 
     caminho_min = deque()
     v = vertices[fim - 1]

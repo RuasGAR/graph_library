@@ -1,5 +1,4 @@
 from typing import List, Tuple
-from os import path, getcwd
 from numpy import float32, int32
 
 

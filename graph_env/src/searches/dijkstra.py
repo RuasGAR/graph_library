@@ -53,21 +53,26 @@ def dijkstra_com_vetor(grafo: VetorAdj, vertice_s: int) -> List[Dict]:
 
 def dijkstra_com_heap(grafo: VetorAdj, vertice_s: int) -> List[Dict]:
 
-    explorados = []
+    vertices: List[Dict] = [
+        Vertice(x, -1, np.inf) for x in range(1, grafo.num_vertices + 1)
+    ]
+    pais: List[int] = [-1 for x in range(grafo.num_vertices)]
 
     distancias = heapdict.heapdict()
     # Populando a heap
     for i in range(1, grafo.num_vertices + 1):
         distancias[np.int32(i)] = np.inf
-    pais: List[int] = [np.int32(-1) for x in range(grafo.num_vertices)]
 
-    # Zerando a distância
+    # Zerando a distância do primeiro
     distancias[vertice_s] = np.float32(0)
 
     while bool(distancias) != False:
 
         u, dist_u = distancias.popitem()
-        explorados.append(Vertice(u, pais[u - 1], dist_u))
+
+        # Atualizando informações definitivas, como um conjunto de "explorados"
+        vertices[u - 1].pai = pais[u - 1]
+        vertices[u - 1].peso = dist_u
 
         for vizinho in grafo.percorrer_vizinhos(u):
 
@@ -80,7 +85,7 @@ def dijkstra_com_heap(grafo: VetorAdj, vertice_s: int) -> List[Dict]:
                     pais[valor_vizinho - 1] = u
             except KeyError:
                 continue
-    return explorados
+    return vertices
 
 
 ###############################################################################################################
