@@ -51,7 +51,7 @@ def questao2(caminho_main: str):
 
     output_path = Path(caminho_main.parents[0], "outputs")
 
-    for i in range(1, 2):
+    for i in range(1, 6):
 
         grafo = ler_grafo(caminho_main, num_grafo=i)
 
@@ -83,7 +83,7 @@ def questao3(caminho_main: str) -> None:
     output_path = Path(caminho_main.parents[0], "outputs")
     vertice_inicial = 1
 
-    for i in range(1, 2):
+    for i in range(1, 6):
 
         grafo = ler_grafo(caminho_main, num_grafo=i)
 
@@ -132,15 +132,6 @@ def tempos_dijkstra(grafo: VetorAdj, k: int):
         # Somente para monitoramento em execução
         print(f"Estamos no índice {index}...")
 
-        # Tempos Vetor
-        tempo_inicial_vetor = time()
-        dijkstra_com_vetor(grafo, s)
-        tempo_final_vetor = time()
-
-        diff_tempo_vetor = tempo_final_vetor - tempo_inicial_vetor
-        tempos_vetor.append(diff_tempo_vetor)
-        print(f"Vetor: {diff_tempo_vetor}")
-
         # Tempos Heap
         tempo_inicial_heap = time()
         dijkstra_com_heap(grafo, s)
@@ -149,6 +140,15 @@ def tempos_dijkstra(grafo: VetorAdj, k: int):
         diff_tempo_heap = tempo_final_heap - tempo_inicial_heap
         tempos_heap.append(diff_tempo_heap)
         print(f"Heap: {diff_tempo_heap}")
+
+        # Tempos Vetor
+        tempo_inicial_vetor = time()
+        dijkstra_com_vetor(grafo, s)
+        tempo_final_vetor = time()
+
+        diff_tempo_vetor = tempo_final_vetor - tempo_inicial_vetor
+        tempos_vetor.append(diff_tempo_vetor)
+        print(f"Vetor: {diff_tempo_vetor}")
 
     return tempos_vetor, tempos_heap
 
