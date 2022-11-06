@@ -13,7 +13,7 @@ def dijkstra_com_vetor(grafo: VetorAdj, vertice_s: int) -> List[Dict]:
 
     # Criação de vertices de todos os vértices, da fila de descobertos
     vertices: List[Dict] = [
-        Vertice(x, -1, np.inf) for x in range(1, grafo.num_vertices + 1)
+        Vertice(x, np.int32(-1), np.inf) for x in range(1, grafo.num_vertices + 1)
     ]
 
     # vai funcionar como se fosse uma fila, constantemente reordenada
@@ -54,9 +54,9 @@ def dijkstra_com_vetor(grafo: VetorAdj, vertice_s: int) -> List[Dict]:
 def dijkstra_com_heap(grafo: VetorAdj, vertice_s: int) -> List[Dict]:
 
     vertices: List[Dict] = [
-        Vertice(x, -1, np.inf) for x in range(1, grafo.num_vertices + 1)
+        Vertice(x, np.int32(-1), np.inf) for x in range(1, grafo.num_vertices + 1)
     ]
-    pais: List[int] = [-1 for x in range(grafo.num_vertices)]
+    pais: List[int] = [np.int32(-1) for x in range(grafo.num_vertices)]
 
     distancias = heapdict.heapdict()
     # Populando a heap
@@ -88,6 +88,45 @@ def dijkstra_com_heap(grafo: VetorAdj, vertice_s: int) -> List[Dict]:
     return vertices
 
 
+def mst(grafo: VetorAdj, vertice_s: int) -> List[Vertice]:
+
+    # Lista de vértices e de pais, relacionados pelo índice do valor do vértice
+    vertices = [
+        Vertice(x, np.int32(-1), np.inf) for x in range(1, grafo.num_vertices + 1)
+    ]
+    pais: List[int] = [np.int32(-1) for x in range(grafo.num_vertices)]
+
+    distancias = heapdict.heapdict()
+    # populando heap
+    for i in range(1, grafo.num_vertices + 1):
+        distancias[np.int32(i)] = np.inf
+
+    # Estágio inicial
+    distancias[vertice_s] = np.float32(0)
+
+    while bool(distancias) != False:
+
+        u, dist_u = distancias.popitem()
+        vertices[u - 1].peso = dist_u
+        vertices[u - 1].pai = pais[u - 1]
+
+        for vizinho in grafo.percorrer_vizinhos(u):
+
+            valor_vizinho = vizinho[0]
+            peso_u_vizinho = vizinho[1]
+
+            try:
+                if (
+                    distancias[valor_vizinho] > peso_u_vizinho
+                ):  # comparamos somente com as arestas locais
+                    distancias[valor_vizinho] = np.float32(peso_u_vizinho)
+                    pais[valor_vizinho - 1] = u
+            except KeyError:
+                continue
+
+    return vertices
+
+
 ###############################################################################################################
 # TESTES
 
@@ -111,5 +150,14 @@ grafo_em_vetor = VetorAdj(n, arestas, tem_pesos=True)
 
 vertices = dijkstra_com_heap(grafo_em_vetor, 1)
 
+for item in vertices:
+    print(item) """
+
+# 3) Minimum Spanning Tree
+""" n, arestas = ler_arquivo(
+    "graph_env/src/searches/graph_teste_pesos_sem_negativo.txt", tem_pesos=True
+)
+grafo_em_vetor = VetorAdj(n, arestas, tem_pesos=True)
+vertices = mst(grafo_em_vetor, 1)
 for item in vertices:
     print(item) """
