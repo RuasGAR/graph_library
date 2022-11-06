@@ -9,11 +9,11 @@ def __main__():
         getcwd(), "graph_env", "src", "estudos_de_caso", "grafos_parte2", "inputs"
     )
 
-    questao1(caminho_grafos)
+    # questao1(caminho_grafos)
 
     # questao2(caminho_grafos)
 
-    # questao3(caminho_grafos)
+    questao3(caminho_grafos)
 
 
 __main__()

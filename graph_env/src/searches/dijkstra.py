@@ -110,6 +110,8 @@ def mst(grafo: VetorAdj, vertice_s: int) -> List[Vertice]:
         vertices[u - 1].peso = dist_u
         vertices[u - 1].pai = pais[u - 1]
 
+        print(vertices[u - 1])  # apenas para debugging
+
         for vizinho in grafo.percorrer_vizinhos(u):
 
             valor_vizinho = vizinho[0]

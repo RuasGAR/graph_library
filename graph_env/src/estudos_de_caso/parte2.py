@@ -2,10 +2,10 @@ import sys
 
 sys.path.insert(1, "C:/Users/gabri/Desktop/graph_library/graph_env/src")
 
-from typing import Dict, List, Tuple, Any, Set, Union
+from typing import Dict, List, Tuple, Any
 from data_structures.search_vertex import Vertice
 from data_structures.adjacency_vector import VetorAdj
-from searches.dijkstra import dijkstra_com_heap, dijkstra_com_vetor
+from searches.dijkstra import dijkstra_com_heap, dijkstra_com_vetor, mst
 from file_utils.file_handlers import ler_arquivo
 from collections import deque
 from pathlib import Path
@@ -87,15 +87,16 @@ def questao3(caminho_main: str) -> None:
 
         grafo = ler_grafo(caminho_main, num_grafo=i)
 
-        distancias, pais, S = mst(grafo, vertice_inicial)
-
-        arvore_minima = construir_caminho_min(distancias, pais, S)
+        arvore_ger_minima = mst(grafo, vertice_inicial)
+        custo_total = np.float64(sum(v.valor for v in arvore_ger_minima))
 
         with open(Path(output_path, f"grafo_W_{i}_Q3.txt"), "a") as file:
             file.write("Esta é a árvore geradora mínima encontrada no grafo: \n\n")
-            for vertice in arvore_minima:
-                file.write(vertice + "\n")
-            file.write("FINAL")
+            file.write(f"A árvore tem o custo total de {custo_total}\n")
+            file.write(f"A árvore geradora mínima está descrita logo abaixo:\n\n")
+            for vertice in arvore_ger_minima:
+                file.write(str(vertice) + "\n")
+            file.write("FINAL\n\n")
 
 
 ############# Funções intermediárias de montagem ##############################
