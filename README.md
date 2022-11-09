@@ -1,5 +1,7 @@
 # Biblioteca de Grafos - (Python)
 
+## Para conseguir ver as imagens, favor acessar o pdf "docs_em.pdf" na raiz
+
 # Requisitos
 
 - Para o funcionamento dessa biblioteca, basta ter o Python - a partir da versão **3.0** - instalada em sua máquina; além do módulo venv ([v. ≥ 3.0](https://docs.python.org/3/library/venv.html)). Responsável pelo provisionamento de um ambiente isolado de execução - de maneira a conter somente o que for necessário às funcionalidades da biblioteca - esse pacote pode ser instalado com auxílio da documentação linkada em sua versão.
