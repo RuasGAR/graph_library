@@ -1,4 +1,4 @@
-from estudos_de_caso.parte2 import questao1, questao2, questao3
+from estudos_de_caso.parte2 import questao1, questao2, questao3, questao4
 from pathlib import Path
 from os import getcwd
 
@@ -13,7 +13,9 @@ def __main__():
 
     # questao2(caminho_grafos)
 
-    questao3(caminho_grafos)
+    # questao3(caminho_grafos)
+
+    # questao4(caminho_grafos)
 
 
 __main__()

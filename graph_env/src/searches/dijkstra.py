@@ -69,7 +69,7 @@ def dijkstra_com_heap(grafo: VetorAdj, vertice_s: int) -> List[Dict]:
     while bool(distancias) != False:
 
         u, dist_u = distancias.popitem()
-
+        print(u)
         # Atualizando informações definitivas, como um conjunto de "explorados"
         vertices[u - 1].pai = pais[u - 1]
         vertices[u - 1].peso = dist_u

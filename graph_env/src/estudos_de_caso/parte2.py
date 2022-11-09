@@ -56,7 +56,7 @@ def questao2(caminho_main: str):
         grafo = ler_grafo(caminho_main, num_grafo=i)
 
         print(f"Grafo {i}")
-        tempos_vetor, tempos_heap = tempos_dijkstra(grafo, 5)
+        tempos_vetor, tempos_heap = tempos_dijkstra(grafo, 3)
 
         medio_vetor = sum(tempos_vetor) / len(tempos_vetor)
         medio_heap = sum(tempos_heap) / len(tempos_heap)
@@ -86,9 +86,8 @@ def questao3(caminho_main: str) -> None:
     for i in range(1, 6):
 
         grafo = ler_grafo(caminho_main, num_grafo=i)
-
         arvore_ger_minima = mst(grafo, vertice_inicial)
-        custo_total = np.float64(sum(v.valor for v in arvore_ger_minima))
+        custo_total = np.float64(sum(v.peso for v in arvore_ger_minima))
 
         with open(Path(output_path, f"grafo_W_{i}_Q3.txt"), "a") as file:
             file.write("Esta é a árvore geradora mínima encontrada no grafo: \n\n")
@@ -97,6 +96,48 @@ def questao3(caminho_main: str) -> None:
             for vertice in arvore_ger_minima:
                 file.write(str(vertice) + "\n")
             file.write("FINAL\n\n")
+
+
+def questao4(caminho_main: str) -> None:
+
+    # Variáveis de auxílio
+    output_path = Path(caminho_main.parents[0], "outputs")
+    pesquisadorxs_alvo = {
+        "Alan M. Turing": np.int32(11365),
+        "J. B. Kruskal": np.int32(471365),
+        "Jon M. Kleinberg": np.int32(5709),
+        "Ã‰va Tardos": np.int32(11386),
+        "Daniel R. Figueiredo": np.int32(343930),
+    }
+    dijkstra: int = np.int32(2722)
+
+    # Lendo arquivos
+    n, arestas = ler_arquivo(
+        Path(caminho_main / f"rede_de_colaboracao.txt"), tem_pesos=True
+    )
+    grafo = VetorAdj(n, arestas, tem_pesos=True)
+
+    mapa = carregar_mapa_colaboradores(caminho_main)
+    # Rodando Dijkstra
+    vertices = dijkstra_com_heap(grafo, dijkstra)
+
+    with open(Path(output_path, f"colaboracao.txt"), "a") as file:
+
+        for chave, valor in pesquisadorxs_alvo.items():
+
+            resultado_pesq = vertices[valor - 1]
+
+            file.write(
+                f"Distância entre Edsger W. Dijkstra e {chave}: {resultado_pesq.peso}\n\n"
+            )
+
+            caminho_min = construir_caminho_min(vertices, valor)
+            file.write("Caminho Mínimo encontrado: \n")
+            for item in caminho_min:
+                file.write(
+                    f"Nó {mapa[item.valor-1]} de num {item.valor} ---> Pai:{item.pai}; Dist: {item.peso}\n"
+                )
+            file.write("\n\n")
 
 
 ############# Funções intermediárias de montagem ##############################
@@ -173,6 +214,19 @@ def ler_grafo(caminho_main: str, num_grafo: int):
     grafo = VetorAdj(n, arestas, tem_pesos=True)
 
     return grafo
+
+
+def carregar_mapa_colaboradores(caminho_main: str) -> List[Dict]:
+
+    mapa = []
+
+    with open(Path(caminho_main / "mapeamento.txt"), "r", encoding="UTF-8") as file:
+        linhas = file.readlines()
+        for i in range(0, len(linhas)):
+            _, nome_pessoa = linhas[i].split(",")
+            nome_pessoa = nome_pessoa.removesuffix("\n")
+            mapa.append(nome_pessoa)
+    return mapa
 
 
 def construir_caminho_min(vertices: List[Dict], fim: int) -> List[Vertice]:
