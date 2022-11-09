@@ -28,7 +28,7 @@ pip install graph_env/requirements.txt
 
 - Veja que agora seu terminal dispõe de uma marcação ao lado do caminho de diretório.
 
-![Untitled](documentação/imagens_do_readme/Untitled.png)
+![Untitled](documentacao/imagens_do_readme/Untitled.png)
 
 - Pronto! Todos os passos já foram dados e agora é só utilizar como quiser! Para uma melhor orientação de como rodar alguns testes, veja a seção “*Caso de Estudos*”.
 
@@ -38,14 +38,14 @@ pip install graph_env/requirements.txt
 
 - Python é uma linguagem bastante flexível em termos de paradigma, sendo a **orientação a objeto** um de seus destaques mais recentes, em especial no desenvolvimento de APIs simples e leves. Na ampla maioria do código, é essa a abordagem utilizada para o desenvolvimento da biblioteca: os códigos são segmentados como classes e separadas em módulos.
 
-![*Estrutura hierárquica do projeto: menores componentes de modularização são as classes*](documentação/imagens/Untitled_1.png)
+![*Estrutura hierárquica do projeto: menores componentes de modularização são as classes*](documentacao/imagens/Untitled_1.png)
 
 *Estrutura hierárquica do projeto: menores componentes de modularização são as classes*
 
 - Certas escolhas de concepção - cuja totalidade é comentada com mais detalhes na seção *Funcionalidades* - reúnem algoritmos com características similares para evitar sintetizar e reduzir instâncias necessárias. Um exemplo dessa natureza pode ser visto no arquivo “busca.py”, o qual inclui uma classe de Busca. Com somente uma instância dessa classe, podemos escolher o melhor algoritmo de busca para grafos sem peso - Breadth First Search ou Depth First Search.
 - Por último - e certamente importante - faz-se importante a exposição do componente básico de praticamente todos os métodos de busca disponíveis na biblioteca. Estamos falando da classe Vertice, disponível no caminho *graph_env/src/data_structures/search_vertex.py*.
 
-![Untitled](documentação/imagens/Untitled_2.png)
+![Untitled](documentacao/imagens/Untitled_2.png)
 
 ## Representação de Grafos
 
@@ -60,11 +60,11 @@ pip install graph_env/requirements.txt
 
 - Até o momento (v_tal), a biblioteca permite o processamento de grafos não direcionados com pesos e sem pesos. O formato de entrada aceito pela biblioteca é bem similar nos dois casos, diferindo somente pela presença de um valor a mais quando as arestas possuem pesos. A escolha foi orientada pelo padrão acadêmico mais comum axs pesquisadorxs da área.
 
-![Sem peso](documentação/imagens/Untitled_3.png)
+![Sem peso](documentacao/imagens/Untitled_3.png)
 
 Sem peso
 
-![Com peso](documentação/imagens/Untitled_4.png)
+![Com peso](documentacao/imagens/Untitled_4.png)
 
 Com peso
 
@@ -78,12 +78,12 @@ Um arquivo .txt deve ser fornecido nos seguintes formatos:
 
 - Em cada parcela do desenvolvimento da lib foram rodados estudos para averiguar a complexidade, viabilidade, qualidade e assertividade dos métodos implementados. Por uma questão de organização, desenvolvemos scripts relativos a cada uma das partes para enxugar a main.
 
-![Untitled](documentação/imagens/Untitled_5.png)
+![Untitled](documentacao/imagens/Untitled_5.png)
 
 - Dessa maneira, se quisermos verificar os resultados da “Questão 3” da parte 2, basta fazer o import do script relacionado. A parte 1 tem maior incidência de prints no terminal de execução como saída e monitoramento do programa, enquanto a parte 2 é um pouco mais inteligente, originando arquivos com as respostas correspondentes para cada grafo. Tais saídas podem ser encontradas no caminho *graph_env/src/estudos_de_caso/grafos_parte2/outputs*. E não se preocupe caso essa pasta não apareça de início: se esse for o caso, qualquer execução da parte 2 já criará o diretório automaticamente.
     - *Observação: todas as questões da parte 2 foram implementadas dessa maneira, tendo somente o caminho para armazenamento dos outputs como parâmetro. As da primeira exigem um pouco mais de desenvoltura com o estado do código.*
 
-![Untitled](documentação/imagens/Untitled_6.png)
+![Untitled](documentacao/imagens/Untitled_6.png)
 
 # Funcionalidades
 
@@ -107,7 +107,7 @@ Mais especificamente, você poderá utilizar os seguintes algoritmos:
 
 - Dijkstra, implementado com vetor de distâncias → com complexidade O(n²), a versão tradicional desse famoso algoritmo é capaz de identificar o custo de todos os outros nós para um ponto de partida escolhido pelo usuário. No entanto, deve-se ter cautela com seu uso: para grafos muito grandes, sua complexidade pode ser impeditiva, seja em termos de memória, seja de processamento (principalmente).
 
-![*Estruturas auxiliares para o algoritmo de Dijkstra com vetor*](documentação/imagens/Untitled_7.png)
+![*Estruturas auxiliares para o algoritmo de Dijkstra com vetor*](documentacao/imagens/Untitled_7.png)
 
 *Estruturas auxiliares para o algoritmo de Dijkstra com vetor*
 
@@ -115,13 +115,13 @@ Mais especificamente, você poderá utilizar os seguintes algoritmos:
     - Por se tratarem de estruturas básicas na computação, a heap possui inúmeras implementações disponíveis em forma de biblioteca para uma grande gama de linguagens. O algoritmo de Dijkstra requer que tenhamos o poder de alterar o custo de um determinado nó, o que significa alterar a estrutura global como um todo. A biblioteca encontrada para tal finalidade foi a [HeapDict](https://pypi.org/project/HeapDict/), que mistura dicionários com as operações de **decrease-key** e **extract** min das heaps.
     
     ![Exemplo de utilização da HeapDict.
-    Aqui são criados 10 itens na heap, cujas chaves são os identificadores de vértices e o valor, seu custo associado.](documentação/imagens/Untitled.jpeg)
+    Aqui são criados 10 itens na heap, cujas chaves são os identificadores de vértices e o valor, seu custo associado.](documentacao/imagens/Untitled.jpeg)
     
     Exemplo de utilização da HeapDict.
     Aqui são criados 10 itens na heap, cujas chaves são os identificadores de vértices e o valor, seu custo associado.
     
 - Árvore geradora mínima, utilizando o algoritmo de Prim: muito similar a Dijkstra, o algoritmo de Prim é capaz de obter os subgrafos nos quais os nós estão todos conectados, assegurando uma das configurações possíveis de se obter essa propriedade com o menor custo possível. Foi implementada usando a estratégia de heaps.
 
-![Em destaque, podemos ver o fator de disparidade com Dijkstra: na exploração de vértices, não nos preocupamos com o menor custo acumulado, mas sim com aquele que garante o menor próximo passo. No exemplo, se a distância conhecida para um vértice for maior do que a distância de u a esse mesmo nó, então devemos substituir o custo associado, e atualizar seu parentesco.](documentação/imagens/Untitled_8.png)
+![Em destaque, podemos ver o fator de disparidade com Dijkstra: na exploração de vértices, não nos preocupamos com o menor custo acumulado, mas sim com aquele que garante o menor próximo passo. No exemplo, se a distância conhecida para um vértice for maior do que a distância de u a esse mesmo nó, então devemos substituir o custo associado, e atualizar seu parentesco.](documentacao/imagens/Untitled_8.png)
 
 Em destaque, podemos ver o fator de disparidade com Dijkstra: na exploração de vértices, não nos preocupamos com o menor custo acumulado, mas sim com aquele que garante o menor próximo passo. No exemplo, se a distância conhecida para um vértice for maior do que a distância de u a esse mesmo nó, então devemos substituir o custo associado, e atualizar seu parentesco.
