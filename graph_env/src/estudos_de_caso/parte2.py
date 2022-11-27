@@ -51,14 +51,14 @@ def questao2(caminho_main: str):
 
     output_path = Path(caminho_main.parents[0], "outputs")
 
-    for i in range(1, 6):
+    for i in range(5, 3, -1):
 
         grafo = ler_grafo(caminho_main, num_grafo=i)
 
         print(f"Grafo {i}")
-        tempos_vetor, tempos_heap = tempos_dijkstra(grafo, 3)
+        tempos_vetor, tempos_heap = tempos_dijkstra(grafo, 2)
 
-        medio_vetor = sum(tempos_vetor) / len(tempos_vetor)
+        # medio_vetor = sum(tempos_vetor) / len(tempos_vetor)
         medio_heap = sum(tempos_heap) / len(tempos_heap)
 
         with open(Path(output_path, f"graph_{i}_Q2.txt"), "a") as file:
@@ -66,10 +66,10 @@ def questao2(caminho_main: str):
             file.write(f"TEMPOS: \n\n")
 
             # Vetor
-            file.write(f"Tempos de Vetor: \n")
+            """ file.write(f"Tempos de Vetor: \n")
             for item in tempos_vetor:
                 file.write(str(item) + ", ")
-            file.write(f"\n\nTempo Médio de Vetor: {medio_vetor}\n\n")
+            file.write(f"\n\nTempo Médio de Vetor: {medio_vetor}\n\n") """
 
             # Heap
             file.write(f"Tempos de Heap: \n")
@@ -183,13 +183,13 @@ def tempos_dijkstra(grafo: VetorAdj, k: int):
         print(f"Heap: {diff_tempo_heap}")
 
         # Tempos Vetor
-        tempo_inicial_vetor = time()
+        """ tempo_inicial_vetor = time()
         dijkstra_com_vetor(grafo, s)
         tempo_final_vetor = time()
 
         diff_tempo_vetor = tempo_final_vetor - tempo_inicial_vetor
         tempos_vetor.append(diff_tempo_vetor)
-        print(f"Vetor: {diff_tempo_vetor}")
+        print(f"Vetor: {diff_tempo_vetor}") """
 
     return tempos_vetor, tempos_heap
 

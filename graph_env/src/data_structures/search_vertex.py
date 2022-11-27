@@ -2,10 +2,6 @@ from typing import Union
 
 
 class Vertice:
-
-    # Temos um parâmetro que vai ocupar memória desnecessária, mas ganhamos na simplificação das chamadas
-    # e na reutilização
-
     def __init__(
         self,
         valor: int,

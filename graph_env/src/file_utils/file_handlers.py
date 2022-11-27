@@ -9,7 +9,8 @@ def ler_arquivo(caminho: str, tem_pesos=False) -> None:
     with open(caminho, "r") as file:
         linhas = file.readlines()
         numero_vertices = int(linhas[0])
-        for linha in linhas[1:]:
+
+        for linha in linhas[2:]:
             numeros_na_linha = linha.split(" ")  # separa por backspace
 
             if tem_pesos:

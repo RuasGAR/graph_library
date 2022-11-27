@@ -1,1 +1,2 @@
 numpy==1.23.3
+heapdict==1.0.1

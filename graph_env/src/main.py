@@ -11,7 +11,7 @@ def __main__():
 
     # questao1(caminho_grafos)
 
-    # questao2(caminho_grafos)
+    questao2(caminho_grafos)
 
     # questao3(caminho_grafos)
 

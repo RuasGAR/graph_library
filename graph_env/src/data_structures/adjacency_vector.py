@@ -26,7 +26,11 @@ print(elemento); """
 
 class VetorAdj:
     def __init__(
-        self, num_vertices: int, arestas: List[Tuple[int]], tem_pesos=False
+        self,
+        num_vertices: int,
+        arestas: List[Tuple[int]],
+        tem_pesos=False,
+        direcionado=False,
     ) -> None:
 
         # Percorrer todas as arestas, criando um elemento inicial para cada vértice
@@ -50,10 +54,12 @@ class VetorAdj:
             # lembrando que o grafo é não-direcionado
             if tem_pesos == True:
                 self.container[par[0] - 1].vetor_vizinhos.append((par[1], par[2]))
-                self.container[par[1] - 1].vetor_vizinhos.append((par[0], par[2]))
+                if direcionado != True:
+                    self.container[par[1] - 1].vetor_vizinhos.append((par[0], par[2]))
             else:
                 self.container[par[0] - 1].vetor_vizinhos.append(par[1])
-                self.container[par[1] - 1].vetor_vizinhos.append(par[0])
+                if direcionado != True:
+                    self.container[par[1] - 1].vetor_vizinhos.append(par[0])
         # print(self.container)
 
     def percorrer_vizinhos(self, valor_vertice: int) -> List[int]:
