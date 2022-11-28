@@ -29,15 +29,25 @@ class VetorAdj:
         self,
         num_vertices: int,
         arestas: List[Tuple[int]],
+        container: List[ElementoInicialVetorAdj],
+    ) -> None:
+        self.num_vertices = num_vertices
+        self.arestas = arestas
+        self.container = container
+
+    @classmethod
+    def formato_tradicional(
+        cls,
+        num_vertices: int,
+        arestas: List[Tuple[int]],
         tem_pesos=False,
         direcionado=False,
-    ) -> None:
+    ):
 
         # Percorrer todas as arestas, criando um elemento inicial para cada vértice
-        self.container: List[ElementoInicialVetorAdj.__class__] = [
+        container: List[ElementoInicialVetorAdj.__class__] = [
             ElementoInicialVetorAdj(x) for x in range(1, num_vertices + 1)
         ]
-        self.num_vertices: int = num_vertices
 
         # Agora, vamos preencher os vizinhos de acordo com as arestas
         # Arestas: [(1, 2), (2, 5), (5, 3), (4, 5), (1, 5)]
@@ -51,16 +61,17 @@ class VetorAdj:
         for par in arestas:
 
             # append de uma tupla com (destino, peso_para_o_destino)
-            # lembrando que o grafo é não-direcionado
+            # grafo pode ser direcionado ou não (parte 3)
             if tem_pesos == True:
-                self.container[par[0] - 1].vetor_vizinhos.append((par[1], par[2]))
+                container[par[0] - 1].vetor_vizinhos.append((par[1], par[2]))
                 if direcionado != True:
-                    self.container[par[1] - 1].vetor_vizinhos.append((par[0], par[2]))
+                    container[par[1] - 1].vetor_vizinhos.append((par[0], par[2]))
             else:
-                self.container[par[0] - 1].vetor_vizinhos.append(par[1])
+                container[par[0] - 1].vetor_vizinhos.append(par[1])
                 if direcionado != True:
-                    self.container[par[1] - 1].vetor_vizinhos.append(par[0])
-        # print(self.container)
+                    container[par[1] - 1].vetor_vizinhos.append(par[0])
+
+        return cls(num_vertices=num_vertices, arestas=arestas, container=container)
 
     def percorrer_vizinhos(self, valor_vertice: int) -> List[int]:
         return self.container[valor_vertice - 1].vetor_vizinhos
@@ -114,14 +125,14 @@ class VetorAdj:
 
 # Primeira Parte (BFS, DFS, e etc)
 
-""" teste_vetor_adj = VetorAdj(5,[(1, 2), (2, 5), (5, 3), (4, 5), (1, 5)])
-#teste_vetor_adj.imprimir()
-print("Vizinhos de 2: " + str(teste_vetor_adj.percorrer_vizinhos(2)));
-print("Vizinhos de 5: " + str(teste_vetor_adj.percorrer_vizinhos(5))); """
+""" teste_vetor_adj = VetorAdj.formato_tradicional(5,[(1, 2), (2, 5), (5, 3), (4, 5), (1, 5)])
+#teste_vetor_adj.imprimir()"""
+# print("Vizinhos de 2: " + str(teste_vetor_adj.percorrer_vizinhos(2)));
+# print("Vizinhos de 5: " + str(teste_vetor_adj.percorrer_vizinhos(5))); """
 
 # Segunda Parte (Dijkstra)
 
-""" teste_vetor_adj = VetorAdj(
+""" teste_vetor_adj = VetorAdj.formato_tradicional(
     5,
     [(1, 2, 0.1), (2, 5, 0.2), (5, 3, 5), (3, 4, -9.5), (4, 5, 2.3), (1, 5, 1)],
     tem_pesos=True,
@@ -129,3 +140,11 @@ print("Vizinhos de 5: " + str(teste_vetor_adj.percorrer_vizinhos(5))); """
 # teste_vetor_adj.imprimir()
 print("Vizinhos de 2: " + str(teste_vetor_adj.percorrer_vizinhos(2)))
 print("Vizinhos de 5: " + str(teste_vetor_adj.percorrer_vizinhos(5))) """
+
+# Teceira Parte (Fluxo -> necessidade de overload)
+
+# Adaptação dos anteriores
+""" teste_vetor_adj = VetorAdj.formato_tradicional(
+    5, [(1, 2), (2, 5), (5, 3), (4, 5), (1, 5)]
+)
+teste_vetor_adj.imprimir() """

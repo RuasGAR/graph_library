@@ -136,7 +136,7 @@ def mst(grafo: VetorAdj, vertice_s: int) -> List[Vertice]:
 """ n, arestas = ler_arquivo(
     "graph_env/src/searches/graph_teste_pesos_sem_negativo.txt", tem_pesos=True
 )
-grafo_em_vetor = VetorAdj(n, arestas, tem_pesos=True)
+grafo_em_vetor = VetorAdj.formato_tradicional(n, arestas, tem_pesos=True)
 
 vertices = dijkstra_com_vetor(grafo_em_vetor, 1)
 
@@ -148,7 +148,7 @@ for item in vertices:
 """ n, arestas = ler_arquivo(
     "graph_env/src/searches/graph_teste_pesos_sem_negativo.txt", tem_pesos=True
 )
-grafo_em_vetor = VetorAdj(n, arestas, tem_pesos=True)
+grafo_em_vetor = VetorAdj.formato_tradicional(n, arestas, tem_pesos=True)
 
 vertices = dijkstra_com_heap(grafo_em_vetor, 1)
 
@@ -159,7 +159,7 @@ for item in vertices:
 """ n, arestas = ler_arquivo(
     "graph_env/src/searches/graph_teste_pesos_sem_negativo.txt", tem_pesos=True
 )
-grafo_em_vetor = VetorAdj(n, arestas, tem_pesos=True)
+grafo_em_vetor = VetorAdj.formato_tradicional(n, arestas, tem_pesos=True)
 vertices = mst(grafo_em_vetor, 1)
 for item in vertices:
     print(item) """

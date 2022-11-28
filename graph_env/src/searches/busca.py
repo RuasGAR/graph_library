@@ -137,7 +137,7 @@ class Busca:
 
 """ Testes para vetor de adjacências """
 
-# grafo_em_vetor = VetorAdj(n, arestas);
+# grafo_em_vetor = VetorAdj.formato_tradicional(n, arestas);
 # vetor_adj_busca = Busca(grafo_em_vetor);
 # print(str(vetor_adj_busca.vertices)[1:-1].replace(', ',''));
 

@@ -20,7 +20,7 @@ def repr_e_leitura(
         grafo = MatrizAdj(n)
         grafo.inserir_arestas(arestas)
     elif grafo_repr == "vetor":
-        grafo = VetorAdj(n, arestas)
+        grafo = VetorAdj.formato_tradicional(n, arestas)
 
     return [grafo, n, len(arestas)]
 
@@ -43,7 +43,7 @@ def tempos_medios(grafo_num: int, graph_repr: str):
         grafo = MatrizAdj(n)
         grafo.inserir_arestas(arestas)
     elif graph_repr == "vetor":
-        grafo = VetorAdj(n, arestas)
+        grafo = VetorAdj.formato_tradicional(n, arestas)
 
     # Instanciando busca para o grafo
     busca_em_grafo = Busca(grafo)

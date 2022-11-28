@@ -21,7 +21,9 @@ def ler_grafo(caminho_main: str, num_grafo: int) -> None:
         Path(caminho_main / f"grafo_rf_{num_grafo}.txt"), tem_pesos=True
     )
 
-    vetor_adj = VetorAdj(n, arestas, tem_pesos=True, direcionado=True)
+    vetor_adj = VetorAdj.formato_tradicional(
+        n, arestas, tem_pesos=True, direcionado=True
+    )
 
     return vetor_adj
 

@@ -115,7 +115,7 @@ def questao4(caminho_main: str) -> None:
     n, arestas = ler_arquivo(
         Path(caminho_main / f"rede_de_colaboracao.txt"), tem_pesos=True
     )
-    grafo = VetorAdj(n, arestas, tem_pesos=True)
+    grafo = VetorAdj.formato_tradicional(n, arestas, tem_pesos=True)
 
     mapa = carregar_mapa_colaboradores(caminho_main)
     # Rodando Dijkstra
@@ -211,7 +211,7 @@ def ler_grafo(caminho_main: str, num_grafo: int):
         tem_pesos=True,
     )
 
-    grafo = VetorAdj(n, arestas, tem_pesos=True)
+    grafo = VetorAdj.formato_tradicional(n, arestas, tem_pesos=True)
 
     return grafo
 
