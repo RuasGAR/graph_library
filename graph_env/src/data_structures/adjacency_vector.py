@@ -73,6 +73,27 @@ class VetorAdj:
 
         return cls(num_vertices=num_vertices, arestas=arestas, container=container)
 
+    @classmethod
+    def formato_com_fluxo(
+        cls,
+        num_vertices: int,
+        arestas: List[Tuple[int]],
+    ):
+        # Aqui, assumimos que o grafo é direcionado e com pesos por padrão
+        # As aretas terão formato de 4-upla: (vertice1, vertice2, capacidade, fluxo_passante)
+
+        container: List[ElementoInicialVetorAdj.__class__] = [
+            ElementoInicialVetorAdj(x) for x in range(1, num_vertices + 1)
+        ]
+
+        for a in arestas:
+            container[a[0] - 1].vetor_vizinhos.append((a[1], a[2], a[3]))
+
+        return cls(num_vertices=num_vertices, arestas=arestas, container=container)
+
+    # Como os métodos abaixo só dependem da estrutura inicial,
+    # qualquer um dos dois construtores vai funcionar
+
     def percorrer_vizinhos(self, valor_vertice: int) -> List[int]:
         return self.container[valor_vertice - 1].vetor_vizinhos
 
@@ -123,14 +144,14 @@ class VetorAdj:
 
 # Testes
 
-# Primeira Parte (BFS, DFS, e etc)
+########## Primeira Parte (BFS, DFS, e etc)
 
 """ teste_vetor_adj = VetorAdj.formato_tradicional(5,[(1, 2), (2, 5), (5, 3), (4, 5), (1, 5)])
 #teste_vetor_adj.imprimir()"""
 # print("Vizinhos de 2: " + str(teste_vetor_adj.percorrer_vizinhos(2)));
 # print("Vizinhos de 5: " + str(teste_vetor_adj.percorrer_vizinhos(5))); """
 
-# Segunda Parte (Dijkstra)
+########## Segunda Parte (Dijkstra)
 
 """ teste_vetor_adj = VetorAdj.formato_tradicional(
     5,
@@ -141,10 +162,17 @@ class VetorAdj:
 print("Vizinhos de 2: " + str(teste_vetor_adj.percorrer_vizinhos(2)))
 print("Vizinhos de 5: " + str(teste_vetor_adj.percorrer_vizinhos(5))) """
 
-# Teceira Parte (Fluxo -> necessidade de overload)
+########## Teceira Parte (Fluxo -> necessidade de overload)
 
 # Adaptação dos anteriores
 """ teste_vetor_adj = VetorAdj.formato_tradicional(
     5, [(1, 2), (2, 5), (5, 3), (4, 5), (1, 5)]
+)
+teste_vetor_adj.imprimir() """
+
+# Implementação da variação com fluxo e capacidade
+# Exemplo do slide 7 da aula 16, com s=3 e t=4
+""" teste_vetor_adj = VetorAdj.formato_com_fluxo(
+    4, [(3, 1, 20, 10), (1, 4, 10, 5), (1, 2, 30, 5), (3, 2, 10, 5), (2, 4, 20, 10)]
 )
 teste_vetor_adj.imprimir() """
