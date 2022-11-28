@@ -5,7 +5,7 @@ sys.path.insert(1, "C:/Users/gabri/Desktop/graph_library/graph_env/src")
 from typing import Dict, List, Tuple, Any
 from data_structures.search_vertex import Vertice
 from data_structures.adjacency_vector import VetorAdj
-from searches.dijkstra import dijkstra_com_heap, dijkstra_com_vetor, mst
+from searches.ford_fulkerson import encontrar_caminho
 from file_utils.file_handlers import ler_arquivo
 from collections import deque
 from pathlib import Path
@@ -29,6 +29,10 @@ def ler_grafo(caminho_main: str, num_grafo: int) -> None:
 
 
 ########## TESTES ##########
-vetor = ler_grafo(
+grafo_em_vetor = ler_grafo(
     Path(getcwd(), "graph_env/src/estudos_de_caso/grafos_parte3/inputs"), 1
 )
+
+# Caminho Mínimo
+""" caminho_min = encontrar_caminho(grafo_em_vetor, 1, 5)
+print(caminho_min) """

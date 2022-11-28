@@ -91,11 +91,21 @@ class VetorAdj:
 
         return cls(num_vertices=num_vertices, arestas=arestas, container=container)
 
-    # Como os métodos abaixo só dependem da estrutura inicial,
-    # qualquer um dos dois construtores vai funcionar
+    # Na verdade, uma coisa mudará: agora, a lista de vetores vizinhos pode ser uma tupla de 2 elementos
+    # ou mais. No primeiro caso, temos o padrão de grafos sem pesos. Quando existem mais parâmetros,
+    # pode haver peso, capacidade e fluxo passante.
 
     def percorrer_vizinhos(self, valor_vertice: int) -> List[int]:
-        return self.container[valor_vertice - 1].vetor_vizinhos
+
+        # Se forem arestas somente com vértices (sem pesos)
+        if len(self.arestas[0]) == 2:
+            return self.container[valor_vertice - 1].vetor_vizinhos
+
+        return list(
+            map(
+                lambda nupla: nupla[0], self.container[valor_vertice - 1].vetor_vizinhos
+            )
+        )
 
     def imprimir(self) -> None:
         for elemento in self.container:

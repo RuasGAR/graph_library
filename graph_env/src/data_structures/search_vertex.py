@@ -5,7 +5,7 @@ class Vertice:
     def __init__(
         self,
         valor: int,
-        pai: int,
+        pai: int = -1,
         peso: float = 0.0,
     ) -> None:
         self.valor: int = valor
