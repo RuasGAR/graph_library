@@ -53,7 +53,9 @@ def construir_residual():
     pass
 
 
-def encontrar_caminho(grafo: VetorAdj, partida: int, destino: int) -> List[int]:
+def encontrar_caminho_e_gargalo(
+    grafo: VetorAdj, partida: int, destino: int
+) -> Tuple[List[Tuple[int]], int]:
 
     # Ao invés de usar o próprio retorno da BFS - que só contém a árvore formada,
     # com todos os nós que foram marcados - vamos pegar a lista inteira de vértices.
@@ -77,47 +79,28 @@ def encontrar_caminho(grafo: VetorAdj, partida: int, destino: int) -> List[int]:
 
     caminho_min = deque()  # type hint seria algo como List[Tuple[int]]
     destino: Vertice = resultado[destino - 1]
+    gargalo: int = destino.peso
 
     while destino.pai != None:
+
+        # Checando a capacidade mínima
+        destino.peso = np.int32(destino.peso)  # capacidades são inteiras
+        if destino.peso < gargalo:
+            gargalo = destino.peso
+
+        # Parte de construção da 3-upla de caminho
         indice_pai = destino.pai - 1
-        capacidade_da_aresta = encontrar_aresta_no_grafo(
-            grafo, indice_pai, destino.valor
-        )[2]
-        caminho_min.appendleft((destino.valor, destino.pai, capacidade_da_aresta))
+        caminho_min.appendleft((destino.valor, destino.pai, destino.peso))
         destino = resultado[indice_pai]
 
     # Inclusão da raiz
-    capacidade_da_aresta = encontrar_aresta_no_grafo(
-        grafo, destino.pai, caminho_min[0][0]
-    )[2]
-    caminho_min.appendleft((destino.valor, destino.pai, capacidade_da_aresta))
+    caminho_min.appendleft((destino.valor, destino.pai, np.int32(destino.peso)))
 
     if len(caminho_min) == 1:
         # Se só tiver a raiz, é como não ter caminho
         return None
 
-    return caminho_min
-
-
-def encontrar_aresta_no_grafo(
-    grafo: VetorAdj, indice_v1: int, valor_v2: int
-) -> Tuple[int]:
-    if indice_v1 == None:
-        indice_v1 = 0
-    # Função necessária por conta da maneira com que fizemos a BFS anteriormente
-    # Não há registro de peso, e implementá-lo direto iria quebrar os processos anteriores
-    # Por isso, vamos pagar um overhead aqui de ter de procurar nos vizinhos dos vértices
-    # pelos pesos associados às arestas dele para um outro vértice de destino.
-    # Logo, acrescentamos O(g max) ao cálculo de complexidade nesse momento
-
-    # Para cada aresta do caminho_mínimo, pagamos então O(g max)
-    aresta = []
-    for vizinho in grafo.container[indice_v1].vetor_vizinhos:
-        if vizinho[0] == valor_v2:
-            # Lembrando que um vizinho é guardado como (destino, peso)
-            # Nesse caso, o peso é a capacidade
-            aresta = tuple((indice_v1 + 1, valor_v2, vizinho[1]))
-    return aresta
+    return (caminho_min, gargalo)
 
 
 ########## TESTES

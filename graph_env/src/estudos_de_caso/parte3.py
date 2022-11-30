@@ -5,7 +5,7 @@ sys.path.insert(1, "C:/Users/gabri/Desktop/graph_library/graph_env/src")
 from typing import Dict, List, Tuple, Any
 from data_structures.search_vertex import Vertice
 from data_structures.adjacency_vector import VetorAdj
-from searches.ford_fulkerson import encontrar_caminho, calcular_gargalo
+from searches.ford_fulkerson import encontrar_caminho_e_gargalo, calcular_gargalo
 from file_utils.file_handlers import ler_arquivo
 from collections import deque
 from pathlib import Path
@@ -34,8 +34,6 @@ grafo_em_vetor = ler_grafo(
 )
 
 # Caminho Mínimo
-caminho_min = encontrar_caminho(grafo_em_vetor, 1, 5)
+caminho_min, gargalo = encontrar_caminho_e_gargalo(grafo_em_vetor, 1, 5)
 print(f"Caminho Mínimo: {caminho_min}")
-
-# Calcular Gargalo
-gargalo = calcular_gargalo(caminho_min)
+print(f"Gargalo: {gargalo}")
