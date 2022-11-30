@@ -35,7 +35,7 @@ grafo_em_vetor = ler_grafo(
 
 # Caminho Mínimo
 caminho_min = encontrar_caminho(grafo_em_vetor, 1, 5)
-print(caminho_min)
+print(f"Caminho Mínimo: {caminho_min}")
 
 # Calcular Gargalo
 gargalo = calcular_gargalo(caminho_min)

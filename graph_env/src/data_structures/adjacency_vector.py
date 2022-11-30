@@ -97,15 +97,8 @@ class VetorAdj:
 
     def percorrer_vizinhos(self, valor_vertice: int) -> List[int]:
 
-        # Se forem arestas somente com vértices (sem pesos)
-        if len(self.arestas[0]) == 2:
-            return self.container[valor_vertice - 1].vetor_vizinhos
-
-        return list(
-            map(
-                lambda nupla: nupla[0], self.container[valor_vertice - 1].vetor_vizinhos
-            )
-        )
+        # Se forem arestas somente com vértices (sem pesos) teremos somente 2 itens em cada aresta
+        return self.container[valor_vertice - 1].vetor_vizinhos
 
     def imprimir(self) -> None:
         for elemento in self.container:

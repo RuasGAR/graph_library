@@ -13,8 +13,11 @@ import numpy as np
 
 
 class Busca:
-    def __init__(self, grafo: Union[MatrizAdj, VetorAdj]) -> None:
+    def __init__(
+        self, grafo: Union[MatrizAdj, VetorAdj], tem_pesos: bool = False
+    ) -> None:
         self.grafo: Union[MatrizAdj, VetorAdj] = grafo
+        self.tem_pesos = tem_pesos
         self.vertices: List[Vertice] = []
 
         if isinstance(grafo, VetorAdj):
@@ -35,6 +38,7 @@ class Busca:
             no.marcador = False
             no.pai = None
             no.nivel = 0
+            no.peso = 0
 
         # Setar fila Q
         fila = deque()
@@ -51,13 +55,23 @@ class Busca:
 
             for w in self.grafo.percorrer_vizinhos(v.valor):
 
-                vizinho_no_vetor: Vertice = self.vertices[w - 1]
+                if self.tem_pesos:
+                    # Vértice vizinho tem formato (v, peso)
+                    # Será útil para saber capacidade na parte 3
+                    vizinho_no_vetor: Vertice = self.vertices[w[0] - 1]
+                else:
+                    # Retorna só o número do vértice vizinho
+                    vizinho_no_vetor: Vertice = self.vertices[w - 1]
 
                 if vizinho_no_vetor.marcador == False:
                     vizinho_no_vetor.marcador = True
                     vizinho_no_vetor.nivel = v.nivel + 1
                     vizinho_no_vetor.pai = v.valor
                     # o ideal seria o endereço de v, mas...
+
+                    # ALTERAÇÃO PARA A PARTE 3
+                    if self.tem_pesos:
+                        vizinho_no_vetor.peso = w[1]
 
                     fila.insert(0, vizinho_no_vetor)
 

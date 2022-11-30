@@ -63,7 +63,7 @@ def encontrar_caminho(grafo: VetorAdj, partida: int, destino: int) -> List[int]:
     # mais fácil, uma vez que essa parcela de memória já está alocada e salva.
     # Caso optássemos pelo retorno original da parte 1, teríamos um sério overhead de execução
 
-    busca_em_grafo = Busca(grafo)
+    busca_em_grafo = Busca(grafo, tem_pesos=True)
     busca_em_grafo.bfs(
         Vertice(partida)
     )  # só chamada da função para alterar os nós marcados e sem ocupar mem
@@ -104,7 +104,6 @@ def encontrar_aresta_no_grafo(
 ) -> Tuple[int]:
     if indice_v1 == None:
         indice_v1 = 0
-
     # Função necessária por conta da maneira com que fizemos a BFS anteriormente
     # Não há registro de peso, e implementá-lo direto iria quebrar os processos anteriores
     # Por isso, vamos pagar um overhead aqui de ter de procurar nos vizinhos dos vértices
