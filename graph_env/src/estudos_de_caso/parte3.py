@@ -40,4 +40,12 @@ print(f"Gargalo: {gargalo}")
 
 # Construção de Grafo Residual
 grafo_residual = construir_residual(grafo_original=grafo_em_vetor)
+# Nesse momento, geral vai estar com true pq né, é basicamente o que deveria
+# Para testar se algo mudou, vamos verificar se agora temos o dobro de arestas
+# É claro que pra verificar se tá certo, são outros quinhentos, mas basta imprimir
+# para poder averiguar algumas correspondências, ao menos.
+
 grafo_residual.imprimir()
+print("Arestas: ")
+print(f"\tGrafo Original -> {len(grafo_em_vetor.arestas)}")
+print(f"\tGrafo Residual -> {len(grafo_residual.arestas)}")
