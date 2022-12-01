@@ -13,44 +13,61 @@ sys.path.insert(1, "C:/Users/gabri/Desktop/graph_library/graph_env/src")
 
 from typing import List, Tuple
 from data_structures.adjacency_vector import VetorAdj
-from data_structures.search_vertex import Vertice
+from data_structures.search_vertex import Vertice, Vertice_Residual
 from searches.busca import Busca
 from collections import deque
 import numpy as np
 
 
 def ford_fulkerson(
-    grafo: VetorAdj, fonte: np.int32, destino: np.int32, capacidade: np.int32
+    grafo_original: VetorAdj, fonte: np.int32, destino: np.int32, capacidade: np.int32
 ) -> np.int32:
 
-    caminho_min = encontrar_caminho(grafo, fonte, destino)
+    # O grafo recebido é o grafo_original, que tem atributos de capacidade e etc
+    # IMPORTANTE: os grafos nesse formato já vêm "inicializados" com fluxo inicial igual a 0
+    grafo_residual = construir_residual(grafo_original)
+
+    caminho_min, gargalo = encontrar_caminho_e_gargalo(grafo_original, fonte, destino)
     if caminho_min == None:
         return "Não é possível estabelecer um caminho mínimo entre a fonte e o destino especificados."
-    gargalo = calcular_gargalo(caminho_min)
+    # Aumento de fluxo
 
     pass
 
 
-def calcular_gargalo(caminho: List[Tuple[int]]) -> Tuple[int]:
-    # Essa função recebe o caminho mínimo encontrado.
-    # Deve retornar a aresta de menor capacidade neste caminho.
-
-    # Aqui vamos pegar o item com a menor capacidade (o índice 2 de cada tripla de aresta)
-    aresta_menor_capacidade = min(caminho, key=lambda aresta: aresta[2])
-
-    return aresta_menor_capacidade
-
-
-def construir_residual():
-
-    caminho = encontrar_caminho()
-    gargalo = calcular_gargalo()
-    for v in caminho:
-        # Se v é original: faz tal coisa
-        #
-        pass
-
+def aumentar_fluxo(grafo: VetorAdj, gargalo: int):
     pass
+
+
+def construir_residual(grafo_original: VetorAdj):
+    # Para esse grafo, como o que importa é o peso(capacidade), podemos usar a implementação anterior,
+    # que foi estendida para poder ser direcionado ou não.
+
+    n = grafo_original.num_vertices
+    arestas_originais = grafo_original.arestas
+    arestas_residuais: List[Tuple[int]] = []
+
+    # Agora vem a parte "diferente": criar as arestas que "voltam"
+    for aresta in arestas_originais:
+        v1: Tuple[int] = aresta[0]
+        v2: Tuple[int] = aresta[1]
+        capacidade = aresta[2]
+        fluxo_passante = aresta[3]
+        original = True
+
+        # Constrói a relação de capacidade e fluxo passante com as arestas originais ou não
+        are_original = (v1, v2, capacidade - fluxo_passante, original)
+        are_reversa = (v2, v1, fluxo_passante, not original)
+
+        # Adiciona nas arestas residuais
+        arestas_residuais.append(are_original)
+        arestas_residuais.append(are_reversa)
+
+    grafo_residual: VetorAdj = VetorAdj.formato_residual(
+        num_vertices=n, arestas=arestas_residuais
+    )
+
+    return grafo_residual
 
 
 def encontrar_caminho_e_gargalo(
@@ -65,7 +82,7 @@ def encontrar_caminho_e_gargalo(
     # mais fácil, uma vez que essa parcela de memória já está alocada e salva.
     # Caso optássemos pelo retorno original da parte 1, teríamos um sério overhead de execução
 
-    busca_em_grafo = Busca(grafo, tem_pesos=True)
+    busca_em_grafo = Busca(grafo, e_residual=True)
     busca_em_grafo.bfs(
         Vertice(partida)
     )  # só chamada da função para alterar os nós marcados e sem ocupar mem
@@ -78,7 +95,7 @@ def encontrar_caminho_e_gargalo(
     # algoritmos - em especial, a construção do formato utilizado na mesma função do algoritmo em si.
 
     caminho_min = deque()  # type hint seria algo como List[Tuple[int]]
-    destino: Vertice = resultado[destino - 1]
+    destino: Vertice_Residual = resultado[destino - 1]
     gargalo: int = destino.peso
 
     while destino.pai != None:
@@ -90,11 +107,20 @@ def encontrar_caminho_e_gargalo(
 
         # Parte de construção da 3-upla de caminho
         indice_pai = destino.pai - 1
-        caminho_min.appendleft((destino.valor, destino.pai, destino.peso))
+        caminho_min.appendleft(
+            (destino.valor, destino.pai, destino.peso, destino.original_ou_reversa)
+        )
         destino = resultado[indice_pai]
 
     # Inclusão da raiz
-    caminho_min.appendleft((destino.valor, destino.pai, np.int32(destino.peso)))
+    caminho_min.appendleft(
+        (
+            destino.valor,
+            destino.pai,
+            np.int32(destino.peso),
+            destino.original_ou_reversa,
+        )
+    )
 
     if len(caminho_min) == 1:
         # Se só tiver a raiz, é como não ter caminho

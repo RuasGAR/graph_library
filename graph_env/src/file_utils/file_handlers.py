@@ -1,8 +1,12 @@
-from typing import List, Tuple
+from typing import List, Tuple, Callable, Union, AnyStr
 from numpy import float32, int32
 
 
-def ler_arquivo(caminho: str, tem_pesos=False) -> None:
+def ler_arquivo(
+    caminho: str,
+    tem_pesos=False,
+    tipo_peso: Callable[[AnyStr], Union[float32, int32]] = float32,
+) -> None:
     numero_vertices: int
     arestas: List[Tuple(int)] = []
 
@@ -17,7 +21,7 @@ def ler_arquivo(caminho: str, tem_pesos=False) -> None:
                 aresta = (
                     int32(numeros_na_linha[0]),
                     int32(numeros_na_linha[1]),
-                    float32(numeros_na_linha[2]),
+                    tipo_peso(numeros_na_linha[2]),
                 )
                 try:
                     if aresta[2] < 0:

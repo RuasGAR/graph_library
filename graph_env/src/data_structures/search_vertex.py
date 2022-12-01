@@ -1,4 +1,5 @@
 from typing import Union
+from numpy import bool8
 
 
 class Vertice:
@@ -28,6 +29,26 @@ class Vertice:
 
         # Primeira Parte:
         # return f"Nó {self.valor}: ----> Pai: {self.pai}; Nivel: {self.nivel}\n"
+
+
+class Vertice_Residual(Vertice):
+    def __init__(
+        self,
+        valor: int,
+        pai: int = -1,
+        peso: float = 0,
+        original_ou_reversa: bool8 = True,
+    ) -> None:
+        super().__init__(valor, pai, peso)
+        self.original_ou_reversa = original_ou_reversa
+
+    def __repr__(self) -> str:
+
+        info_com_peso = super().__repr__()
+        original_ou_reversa = (
+            "Original" if self.original_ou_reversa == True else "Reversa"
+        )
+        return f"{info_com_peso} Original/Reversa: {original_ou_reversa}"
 
 
 # Teste

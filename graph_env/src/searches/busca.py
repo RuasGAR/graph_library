@@ -7,29 +7,30 @@ sys.path.insert(1, "/home/ruasgar/Bureau/trabalho_grafos/graph_env/src")
 from file_utils.file_handlers import ler_arquivo
 from data_structures.adjacency_vector import VetorAdj
 from data_structures.adjacency_matrix import MatrizAdj
-from data_structures.search_vertex import Vertice
+from data_structures.search_vertex import Vertice, Vertice_Residual
 from collections import deque
 import numpy as np
 
 
 class Busca:
     def __init__(
-        self, grafo: Union[MatrizAdj, VetorAdj], tem_pesos: bool = False
+        self, grafo: Union[MatrizAdj, VetorAdj], e_residual: bool = False
     ) -> None:
         self.grafo: Union[MatrizAdj, VetorAdj] = grafo
-        self.tem_pesos = tem_pesos
+        self.e_residual = e_residual
         self.vertices: List[Vertice] = []
 
         if isinstance(grafo, VetorAdj):
-            self.vertices = [
-                Vertice(x.valor) for x in grafo.container
-            ]  # Quantidade de elementos no vetor container é n
+            # Quantidade de elementos no vetor container é n
+            if self.e_residual:
+                self.vertices = [Vertice_Residual(x.valor) for x in grafo.container]
+            else:
+                self.vertices = [Vertice(x.valor) for x in grafo.container]
         elif isinstance(grafo, MatrizAdj):
-            self.vertices = [
-                Vertice(x + 1) for x in range(len(grafo.matriz))
-            ]  # Quantidade de linhas da matriz é n
+            # Quantidade de linhas da matriz é n
+            self.vertices = [Vertice(x + 1) for x in range(len(grafo.matriz))]
 
-    def bfs(self, vertice_s: Vertice) -> List[Vertice]:
+    def bfs(self, vertice_s: Vertice) -> List[Union[Vertice, Vertice_Residual]]:
 
         # Desmarcar todos os vértices
         # Por natureza, já são desmarcados, mas alterando por referência, é sempre bom rever
@@ -55,8 +56,9 @@ class Busca:
 
             for w in self.grafo.percorrer_vizinhos(v.valor):
 
-                if self.tem_pesos:
-                    # Vértice vizinho tem formato (v, peso)
+                if self.e_residual:
+                    # Aresta tem formato (v, capacidade, original_ou_reversa)
+                    # Vizinho vai precisar guardar essas informações para a remontagem do caminho mínimo
                     # Será útil para saber capacidade na parte 3
                     vizinho_no_vetor: Vertice = self.vertices[w[0] - 1]
                 else:
@@ -70,8 +72,10 @@ class Busca:
                     # o ideal seria o endereço de v, mas...
 
                     # ALTERAÇÃO PARA A PARTE 3
-                    if self.tem_pesos:
+                    if self.e_residual:
                         vizinho_no_vetor.peso = w[1]
+                        original_ou_reversa = w[2]
+                        vizinho_no_vetor.org_ou_rev = original_ou_reversa
 
                     fila.insert(0, vizinho_no_vetor)
 

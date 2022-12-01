@@ -1,5 +1,6 @@
 from math import floor, ceil
-from typing import List, Tuple
+from typing import List, Tuple, Union
+import numpy as np
 
 
 class ElementoInicialVetorAdj:
@@ -77,8 +78,11 @@ class VetorAdj:
     def formato_com_fluxo(
         cls,
         num_vertices: int,
-        arestas: List[Tuple[int]],
+        arestas: List[Tuple[int, bool]],
     ):
+
+        fluxo: int = 0
+
         # Aqui, assumimos que o grafo é direcionado e com pesos por padrão
         # As aretas terão formato de 4-upla: (vertice1, vertice2, capacidade, fluxo_passante)
 
@@ -86,8 +90,34 @@ class VetorAdj:
             ElementoInicialVetorAdj(x) for x in range(1, num_vertices + 1)
         ]
 
-        for a in arestas:
-            container[a[0] - 1].vetor_vizinhos.append((a[1], a[2], a[3]))
+        for index, a in enumerate(arestas):
+            # Inserção nos vetores de vizinhos de cada vértice
+            container[a[0] - 1].vetor_vizinhos.append((a[1], a[2], fluxo))
+            # Acrescentando informação de fluxo para cada aresta
+            arestas[index] = (a[0], a[1], a[2], fluxo)
+
+        return cls(num_vertices=num_vertices, arestas=arestas, container=container)
+
+    @classmethod
+    def formato_residual(
+        cls,
+        num_vertices: int,
+        arestas: List[Tuple[Union[int, bool]]],
+    ):
+
+        # Aqui, assumimos que o grafo é direcionado,com pesos, e que possui
+        # As aretas terão formato de 4-upla: (vertice1, vertice2, capacidade, original_ou_reversa)
+
+        container: List[ElementoInicialVetorAdj.__class__] = [
+            ElementoInicialVetorAdj(x) for x in range(1, num_vertices + 1)
+        ]
+
+        for index, a in enumerate(arestas):
+            original_ou_reversa = np.bool8(True)  # True -> original; False -> reversa
+            # Inserção nos vetores de vizinhos de cada vértice
+            container[a[0] - 1].vetor_vizinhos.append((a[1], a[2], original_ou_reversa))
+            # Acrescentando a informação de original_ou_reversa na aresta
+            arestas[index] = (a[0], a[1], a[2], original_ou_reversa)
 
         return cls(num_vertices=num_vertices, arestas=arestas, container=container)
 
