@@ -11,7 +11,7 @@ import sys
 
 sys.path.insert(1, "C:/Users/gabri/Desktop/graph_library/graph_env/src")
 
-from typing import List, Tuple
+from typing import List, Tuple, Union
 from data_structures.adjacency_vector import VetorAdj
 from data_structures.search_vertex import Vertice, Vertice_Residual
 from searches.busca import Busca
@@ -28,15 +28,85 @@ def ford_fulkerson(
     grafo_residual = construir_residual(grafo_original)
 
     caminho_min, gargalo = encontrar_caminho_e_gargalo(grafo_original, fonte, destino)
-    if caminho_min == None:
-        return "Não é possível estabelecer um caminho mínimo entre a fonte e o destino especificados."
+    fluxo_max: int = 0
     # Aumento de fluxo
 
+    while caminho_min != None:
+        atualizar_grafos()
+
     pass
 
 
-def aumentar_fluxo(grafo: VetorAdj, gargalo: int):
-    pass
+def atualizar_grafos(
+    grafo_original: VetorAdj,
+    grafo_residual: VetorAdj,
+    gargalo: int,
+    caminho_min: List[Tuple[Union[int, bool]]],
+):
+    for aresta in caminho_min:
+        original_ou_reversa = aresta[3]
+
+        # Mudanças no Original
+        aresta_lista_adj_g_original, _ = encontrar_arestas(grafo_original, meta=aresta)
+
+        if aresta_lista_adj_g_original != None:
+
+            fluxo = aresta_lista_adj_g_original[0][2]
+
+            if original_ou_reversa == True:
+                fluxo = fluxo + gargalo
+            else:
+                fluxo = fluxo - gargalo
+
+            # Necessário porque a referência se perdeu em algum momento
+            aresta_lista_adj_g_original[0][2] = fluxo
+
+            # Mudanças no Residual
+            aresta_lista_adj_g_residual, _ = encontrar_arestas(
+                grafo_residual, meta=aresta
+            )
+
+            capacidade = aresta_lista_adj_g_residual[0][1]
+
+            if original_ou_reversa == True:
+                nova_capacidade = capacidade - gargalo
+                if nova_capacidade < 0:
+                    capacidade = 0
+                else:
+                    capacidade = nova_capacidade
+            else:
+                nova_capacidade = capacidade + gargalo
+                # aresta[1] é o peso, a capacidade expressa pela aresta
+                if nova_capacidade > aresta[2]:
+                    capacidade = aresta[2]
+
+            aresta_lista_adj_g_residual[0][1] = capacidade
+
+    return None
+
+
+def encontrar_arestas(grafo: VetorAdj, meta: Tuple[Union[int, bool]]):
+
+    v1: int = meta[1]
+    v2: int = meta[0]
+
+    if meta[1] == None:
+        return None, None
+    else:
+        # Encontrar aresta correspondente no vetor de adjacência
+        aresta_vizinhanca = list(
+            filter(
+                lambda vizinho: vizinho if vizinho[0] == v2 else None,
+                grafo.container[v1 - 1].vetor_vizinhos,
+            )
+        )
+
+        # Encontrar aresta na representação do dado grafo
+        aresta = list(
+            filter(lambda v: v if v[0] == v1 and v[1] == v2 else None, grafo.arestas)
+        )
+
+    return aresta_vizinhanca, aresta
 
 
 def construir_residual(grafo_original: VetorAdj):
@@ -72,7 +142,7 @@ def construir_residual(grafo_original: VetorAdj):
 
 def encontrar_caminho_e_gargalo(
     grafo: VetorAdj, partida: int, destino: int
-) -> Tuple[List[Tuple[int]], int]:
+) -> Tuple[List[Tuple[int, Union[int, bool]]], int]:
 
     # Ao invés de usar o próprio retorno da BFS - que só contém a árvore formada,
     # com todos os nós que foram marcados - vamos pegar a lista inteira de vértices.
@@ -105,7 +175,7 @@ def encontrar_caminho_e_gargalo(
         if destino.peso < gargalo:
             gargalo = destino.peso
 
-        # Parte de construção da 3-upla de caminho
+        # Parte de construção da 4-upla de caminho
         indice_pai = destino.pai - 1
         caminho_min.appendleft(
             (destino.valor, destino.pai, destino.peso, destino.original_ou_reversa)

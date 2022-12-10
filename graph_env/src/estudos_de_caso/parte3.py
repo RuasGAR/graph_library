@@ -2,14 +2,15 @@ import sys
 
 sys.path.insert(1, "C:/Users/gabri/Desktop/graph_library/graph_env/src")
 
-from typing import Dict, List, Tuple, Any
-from data_structures.search_vertex import Vertice
 from data_structures.adjacency_vector import VetorAdj
-from searches.ford_fulkerson import encontrar_caminho_e_gargalo, construir_residual
+from searches.ford_fulkerson import (
+    encontrar_caminho_e_gargalo,
+    construir_residual,
+    atualizar_grafos,
+)
 from file_utils.file_handlers import ler_arquivo
-from collections import deque
 from pathlib import Path
-from os import mkdir, getcwd
+from os import getcwd
 from numpy import random
 from time import time
 import numpy as np
@@ -45,7 +46,7 @@ grafo_residual = construir_residual(grafo_original=grafo_em_vetor)
 # É claro que pra verificar se tá certo, são outros quinhentos, mas basta imprimir
 # para poder averiguar algumas correspondências, ao menos.
 
-grafo_residual.imprimir()
-print("Arestas: ")
-print(f"\tGrafo Original -> {len(grafo_em_vetor.arestas)}")
-print(f"\tGrafo Residual -> {len(grafo_residual.arestas)}")
+# Atualização de Grafos:
+atualizar_grafos(grafo_em_vetor, grafo_residual, gargalo, caminho_min)
+
+print(f"Checando atualização: {grafo_em_vetor.container[454]}")

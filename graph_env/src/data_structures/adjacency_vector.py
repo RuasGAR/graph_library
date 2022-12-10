@@ -78,7 +78,7 @@ class VetorAdj:
     def formato_com_fluxo(
         cls,
         num_vertices: int,
-        arestas: List[Tuple[int, bool]],
+        arestas: List[List[Union[int, bool]]],
     ):
 
         fluxo: int = 0
@@ -92,9 +92,9 @@ class VetorAdj:
 
         for index, a in enumerate(arestas):
             # Inserção nos vetores de vizinhos de cada vértice
-            container[a[0] - 1].vetor_vizinhos.append((a[1], a[2], fluxo))
+            container[a[0] - 1].vetor_vizinhos.append([a[1], a[2], fluxo])
             # Acrescentando informação de fluxo para cada aresta
-            arestas[index] = (a[0], a[1], a[2], fluxo)
+            arestas[index] = [a[0], a[1], a[2], fluxo]
 
         return cls(num_vertices=num_vertices, arestas=arestas, container=container)
 
@@ -102,7 +102,7 @@ class VetorAdj:
     def formato_residual(
         cls,
         num_vertices: int,
-        arestas: List[Tuple[Union[int, bool]]],
+        arestas: List[List[Union[int, bool]]],
     ):
 
         # Aqui, assumimos que o grafo é direcionado,com pesos, e que possui
@@ -115,9 +115,9 @@ class VetorAdj:
         for index, a in enumerate(arestas):
             original_ou_reversa = np.bool8(True)  # True -> original; False -> reversa
             # Inserção nos vetores de vizinhos de cada vértice
-            container[a[0] - 1].vetor_vizinhos.append((a[1], a[2], original_ou_reversa))
+            container[a[0] - 1].vetor_vizinhos.append([a[1], a[2], original_ou_reversa])
             # Acrescentando a informação de original_ou_reversa na aresta
-            arestas[index] = (a[0], a[1], a[2], original_ou_reversa)
+            arestas[index] = [a[0], a[1], a[2], original_ou_reversa]
 
         return cls(num_vertices=num_vertices, arestas=arestas, container=container)
 
