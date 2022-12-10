@@ -48,5 +48,4 @@ grafo_residual = construir_residual(grafo_original=grafo_em_vetor)
 
 # Atualização de Grafos:
 atualizar_grafos(grafo_em_vetor, grafo_residual, gargalo, caminho_min)
-
-print(f"Checando atualização: {grafo_em_vetor.container[454]}")
+print(f"Checando atualização: {grafo_residual.container[4]}")

@@ -113,7 +113,7 @@ class VetorAdj:
         ]
 
         for index, a in enumerate(arestas):
-            original_ou_reversa = np.bool8(True)  # True -> original; False -> reversa
+            original_ou_reversa: np.bool = a[3]  # True -> original; False -> reversa
             # Inserção nos vetores de vizinhos de cada vértice
             container[a[0] - 1].vetor_vizinhos.append([a[1], a[2], original_ou_reversa])
             # Acrescentando a informação de original_ou_reversa na aresta
