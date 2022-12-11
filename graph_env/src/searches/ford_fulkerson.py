@@ -20,21 +20,24 @@ import numpy as np
 
 
 def ford_fulkerson(
-    grafo_original: VetorAdj, fonte: np.int32, destino: np.int32, capacidade: np.int32
+    grafo_original: VetorAdj, fonte: np.int32, destino: np.int32
 ) -> np.int32:
 
     # O grafo recebido é o grafo_original, que tem atributos de capacidade e etc
     # IMPORTANTE: os grafos nesse formato já vêm "inicializados" com fluxo inicial igual a 0
     grafo_residual = construir_residual(grafo_original)
 
-    caminho_min, gargalo = encontrar_caminho_e_gargalo(grafo_original, fonte, destino)
+    caminho_min, gargalo = encontrar_caminho_e_gargalo(grafo_residual, fonte, destino)
     fluxo_max: int = 0
-    # Aumento de fluxo
 
     while caminho_min != None:
-        atualizar_grafos()
+        atualizar_grafos(grafo_original, grafo_residual, gargalo, caminho_min)
+        fluxo_max += gargalo
+        caminho_min, gargalo = encontrar_caminho_e_gargalo(
+            grafo_residual, fonte, destino
+        )
 
-    pass
+    return fluxo_max
 
 
 def atualizar_grafos(
@@ -65,6 +68,8 @@ def atualizar_grafos(
 
             # Mudanças no Residual
 
+            direta_deletada, contraria_deletada = False, False
+
             (
                 aresta_lista_adj_g_residual,
                 aresta_contraria_adj_g_residual,
@@ -83,25 +88,32 @@ def atualizar_grafos(
                 nova_capacidade_direto = capacidade_caminho_direto - gargalo
                 nova_capacidade_contrario = capacidade_caminho_contrario + gargalo
 
-                if nova_capacidade_direto < 0:
-                    nova_capacidade_direto = 0
-                if nova_capacidade_contrario > aresta[2]:
-                    nova_capacidade_contrario = aresta[2]
+                """ if nova_capacidade_direto <= 0:
+                    del aresta_lista_adj_g_residual
+                    direta_deletada = True """
+
+                # Essa possibilidade na verdade não existe
+                """ if nova_capacidade_contrario > aresta[2]:
+                    nova_capacidade_contrario = aresta[2] """
 
             else:
                 nova_capacidade_direto = capacidade_caminho_direto + gargalo
                 nova_capacidade_contrario = capacidade_caminho_contrario - gargalo
 
                 # aresta[1] é o peso, a capacidade expressa pela aresta
-                if nova_capacidade_direto > aresta[2]:
-                    capacidade_caminho_direto = aresta[2]
-                if nova_capacidade_contrario < 0:
-                    nova_capacidade_contrario = 0
+                """ if nova_capacidade_direto > aresta[2]:
+                    capacidade_caminho_direto = aresta[2] """
+                """ if nova_capacidade_contrario <= 0:
+                    del aresta_contraria_adj_g_residual
+                    contraria_deletada = True """
 
+            """ if direta_deletada:
+                aresta_contraria_adj_g_residual[0][1] = nova_capacidade_contrario
+            elif contraria_deletada:
+                aresta_lista_adj_g_residual[0][1] = nova_capacidade_direto
+            else:"""
             aresta_lista_adj_g_residual[0][1] = nova_capacidade_direto
             aresta_contraria_adj_g_residual[0][1] = nova_capacidade_contrario
-
-    return None
 
 
 def encontrar_arestas(
@@ -223,7 +235,7 @@ def encontrar_caminho_e_gargalo(
 
     if len(caminho_min) == 1:
         # Se só tiver a raiz, é como não ter caminho
-        return None
+        return None, None
 
     return (caminho_min, gargalo)
 

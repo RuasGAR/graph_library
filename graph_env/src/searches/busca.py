@@ -61,11 +61,12 @@ class Busca:
                     # Vizinho vai precisar guardar essas informações para a remontagem do caminho mínimo
                     # Será útil para saber capacidade na parte 3
                     vizinho_no_vetor: Vertice = self.vertices[w[0] - 1]
+
                 else:
                     # Retorna só o número do vértice vizinho
                     vizinho_no_vetor: Vertice = self.vertices[w - 1]
 
-                if vizinho_no_vetor.marcador == False:
+                if vizinho_no_vetor.marcador == False and w[1] > 0:
                     vizinho_no_vetor.marcador = True
                     vizinho_no_vetor.nivel = v.nivel + 1
                     vizinho_no_vetor.pai = v.valor
